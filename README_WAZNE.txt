@@ -1,37 +1,17 @@
-Kicia & Rufi Runner V8.9 — SPRITE SHEETS + MOBILE JUMP ASSIST
+Kicia & Rufi Runner V9.1 — DINO EASY MOBILE
 
-DLACZEGO TEN ZIP MA MAŁO PLIKÓW:
-- 16 prawdziwych klatek każdej postaci nadal istnieje.
-- Zamiast 16 osobnych PNG na postać są zapisane w jednym arkuszu 4x4.
-- 6 postaci = 6 sprite sheetów zamiast 96 osobnych plików.
-- Domyślnie nadal 7 FPS.
-- To NIE jest sztuczne zwiększenie FPS.
-
-TELEFON:
-- mocniejszy skok: JUMP_MOBILE -900
-- niższa grawitacja mobilna
-- 0.18 s minimalnego wspomagania wznoszenia po szybkim tapnięciu
-- 0.16 s ochrony tylko przed dolną przeszkodą bezpośrednio po rozpoczęciu skoku
-- mniejszy hitbox postaci na telefonie
-- mniejszy hitbox dolnych przeszkód
-- dolne przeszkody są ~24% mniejsze niż desktopowe
+Co zmieniłem:
+- jeszcze niższy, krótszy skok jak w Chrome Dino
+- mobilny skok ma około 103px maksymalnej wysokości
+- mniejsze dolne przeszkody na telefonie
+- mniejszy hitbox postaci i dolnych przeszkód
+- 0.19 s ochrony od dolnej przeszkody po rozpoczęciu skoku
 - większy jump buffer i coyote time
+- więcej czasu na reakcję
 - większe odstępy między przeszkodami
-- teoretyczna wysokość skoku ~274px
+- górne przeszkody zaczynają się później i rzadziej
+- pierwszy obstacle na telefonie pojawia się później
+- pion i poziom dalej działają
+- tło urodzinowe i wszystkie sprite sheety zostają
 
-PRZYCISKI TELEFON:
-- Pomiń / Zagraj jeszcze raz / Pauza / Wróć / Postacie mają osobne touchend
-- touchstart/pointerdown zatrzymuje propagację do planszy
-- plansza nie powinna traktować przycisku jako skoku
-- minimalny rozmiar przycisku na telefonie 44px
-
-TŁO:
-- Ona + Rufi: birthday_intro.webp z Waszym zdjęciem z plaży i napisem
-  „Wszystkiego najlepszego, mój maluszku, kocham cię księżniczko”.
-
-WAŻNE:
-- To jest PATCH do obecnego repo.
-- Nie usuwaj map_1.webp ... map_7.webp — stare mapy zostają.
-- Możesz wrzucić wszystkie pliki z tego ZIP-a naraz: jest ich 41, czyli dużo mniej niż limit 100.
-
-Walidacja JavaScript: OK
+JavaScript: OK
