@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#140a19">
-<title>Kicia & Rufi Runner V8.7</title>
+<title>Kicia & Rufi Runner V8.9</title>
 <style>
 :root{
  --bg:#0b0710;--panel:#1b1121;--line:rgba(255,255,255,.11);
@@ -17,7 +17,7 @@ body{background:
  radial-gradient(circle at 8% 0%,rgba(255,105,159,.17),transparent 26%),
  radial-gradient(circle at 94% 4%,rgba(122,104,255,.12),transparent 24%),
  linear-gradient(180deg,#100a15,#09060d 80%)}
-button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wrap{width:min(1100px,calc(100% - 10px));margin:auto}
+button{font:inherit;touch-action:manipulation;-webkit-user-select:none;user-select:none;pointer-events:auto}.hidden{display:none!important}.screen{min-height:100svh}.wrap{width:min(1100px,calc(100% - 10px));margin:auto}
 #select{display:grid;place-items:center;padding:14px 0 24px}
 .panel{width:min(960px,calc(100% - 12px));border-radius:32px;overflow:hidden;background:linear-gradient(180deg,rgba(31,20,39,.98),rgba(15,10,20,.99));border:1px solid var(--line);box-shadow:var(--shadow)}
 .head{padding:20px 20px 14px;background:radial-gradient(circle at 84% 8%,rgba(255,111,166,.17),transparent 29%)}
@@ -96,6 +96,12 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
  .upperNotice{top:max(8px,env(safe-area-inset-top));right:64px}
 }
 
+
+@media(max-width:760px){
+ button,.btn,.square,.birthdaySkip{min-height:44px;touch-action:manipulation!important;position:relative;z-index:50}
+ .overlay button,.birthdayIntro button{pointer-events:auto!important}
+}
+
 </style>
 </head>
 <body>
@@ -104,14 +110,14 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
  <div class="head">
   <div class="tag"><i></i> wybierz postać</div>
   <h1>Kicia & <em>Rufi</em> Runner</h1>
-  <p>V8.7 — stare mapy zostają • łagodniejsze cienie • płynniejszy ruch postaci.</p>
+  <p>V8.9 — 16 prawdziwych klatek w 1 sprite sheecie na postać • 7 FPS • mocniejszy skok na telefonie.</p>
   <div class="loader"><i id="loadbar"></i></div><div id="loadtxt" class="loadtxt">Ładowanie grafik...</div>
  </div>
  <div id="grid" class="grid"></div>
  <div class="settings">
   <div class="settingsTop"><b>Rytm animacji postaci</b><span id="fpsFeel">Naturalnie</span></div>
-  <div class="fpsRow"><input id="fpsSlider" class="fpsSlider" type="range" min="5" max="14" step="1" value="7"><div id="fpsValue" class="fpsValue">7 FPS</div></div>
-  <div class="presets"><button class="preset" data-v="5">5</button><button class="preset" data-v="6">6</button><button class="preset" data-v="7">7</button><button class="preset" data-v="8">8</button><button class="preset" data-v="10">10</button><button class="preset" data-v="12">12</button></div>
+  <div class="fpsRow"><input id="fpsSlider" class="fpsSlider" type="range" min="5" max="10" step="1" value="7"><div id="fpsValue" class="fpsValue">7 FPS</div></div>
+  <div class="presets"><button class="preset" data-v="5">5</button><button class="preset" data-v="6">6</button><button class="preset" data-v="7">7</button><button class="preset" data-v="8">8</button><button class="preset" data-v="10">10</button></div>
  </div>
  <div class="foot"><div class="choice"><b id="choiceName"></b><span id="choiceDesc"></span></div><div class="actions"><button id="random" class="btn ghost">Losuj</button><button id="start" class="btn primary" disabled>Graj</button></div></div>
 </div>
@@ -143,16 +149,16 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
 </section>
 
 <script>
-const CHARS=[{"id": "pink", "name": "Różowa Kicia", "desc": "różowa kicia", "frames": ["pink_0.png", "pink_1.png", "pink_2.png", "pink_3.png", "pink_4.png", "pink_5.png", "pink_6.png", "pink_7.png"], "scale": 1.0}, {"id": "peach", "name": "Brzoskwiniowa Kicia", "desc": "brzoskwiniowa kicia", "frames": ["peach_0.png", "peach_1.png", "peach_2.png", "peach_3.png", "peach_4.png", "peach_5.png", "peach_6.png", "peach_7.png"], "scale": 1.0}, {"id": "black", "name": "Czarna Kicia", "desc": "czarno-biała kicia", "frames": ["black_0.png", "black_1.png", "black_2.png", "black_3.png", "black_4.png", "black_5.png", "black_6.png", "black_7.png"], "scale": 1.0}, {"id": "lavender", "name": "Lawendowa Kicia", "desc": "lawendowa kicia", "frames": ["lavender_0.png", "lavender_1.png", "lavender_2.png", "lavender_3.png", "lavender_4.png", "lavender_5.png", "lavender_6.png", "lavender_7.png"], "scale": 1.0}, {"id": "rufi", "name": "Rufi", "desc": "Rufi", "frames": ["rufi_0.png", "rufi_1.png", "rufi_2.png", "rufi_3.png", "rufi_4.png", "rufi_5.png", "rufi_6.png", "rufi_7.png"], "scale": 1.1}, {"id": "girlRufi", "name": "Ona + Rufi", "desc": "ona jedzie na Rufim", "frames": ["girlRufi_0.png", "girlRufi_1.png", "girlRufi_2.png", "girlRufi_3.png", "girlRufi_4.png", "girlRufi_5.png", "girlRufi_6.png", "girlRufi_7.png"], "scale": 1.24}], MAPS=[{"name": "Kwitnąca dolina", "src": "map_1.webp", "fx": "petals"}, {"name": "Plaża", "src": "map_2.webp", "fx": "bubbles"}, {"name": "Noc nad jeziorem", "src": "map_3.webp", "fx": "fireflies"}, {"name": "Miasteczko", "src": "map_4.webp", "fx": "petals"}, {"name": "Sakura", "src": "map_5.webp", "fx": "petals"}, {"name": "Zachód słońca", "src": "map_6.webp", "fx": "bubbles"}, {"name": "Księżycowa kraina", "src": "map_7.webp", "fx": "fireflies"}], OBSTACLES=[{"src": "obstacle_0.png", "name": "kałuża", "w": 166, "h": 74, "hit": 0.58}, {"src": "obstacle_1.png", "name": "poduszka", "w": 132, "h": 92, "hit": 0.7}, {"src": "obstacle_2.png", "name": "doniczka", "w": 112, "h": 126, "hit": 0.7}, {"src": "obstacle_3.png", "name": "klocki", "w": 130, "h": 116, "hit": 0.7}, {"src": "obstacle_4.png", "name": "miękka kostka", "w": 132, "h": 124, "hit": 0.72}, {"src": "obstacle_5.png", "name": "stołeczek", "w": 124, "h": 112, "hit": 0.7}, {"src": "obstacle_6.png", "name": "rozlana woda", "w": 170, "h": 84, "hit": 0.58}, {"src": "obstacle_7.png", "name": "kocia poducha", "w": 142, "h": 88, "hit": 0.68}, {"src": "obstacle_8.png", "name": "koszyk", "w": 136, "h": 126, "hit": 0.72}], UPPER_OBSTACLES=[{"src": "upper_0.png", "w": 122, "h": 132, "hit": 0.62}, {"src": "upper_1.png", "w": 102, "h": 126, "hit": 0.62}, {"src": "upper_2.png", "w": 116, "h": 122, "hit": 0.62}, {"src": "upper_3.png", "w": 108, "h": 118, "hit": 0.62}, {"src": "upper_4.png", "w": 122, "h": 126, "hit": 0.62}, {"src": "upper_5.png", "w": 106, "h": 116, "hit": 0.62}, {"src": "upper_6.png", "w": 126, "h": 118, "hit": 0.62}, {"src": "upper_7.png", "w": 110, "h": 126, "hit": 0.62}, {"src": "upper_8.png", "w": 118, "h": 132, "hit": 0.62}], COLLECTIBLES=[{"src": "collect_0.png", "name": "Serduszko", "points": 25, "w": 72, "h": 70, "color": "#ff75a9"}, {"src": "collect_1.png", "name": "Prezent", "points": 60, "w": 78, "h": 78, "color": "#ffd06d"}, {"src": "collect_2.png", "name": "Rybka", "points": 45, "w": 82, "h": 66, "color": "#69d4ff"}, {"src": "collect_3.png", "name": "Włóczka", "points": 35, "w": 76, "h": 72, "color": "#bc8cff"}, {"src": "collect_4.png", "name": "Gwiazdka", "points": 50, "w": 74, "h": 74, "color": "#ffe06b"}, {"src": "collect_5.png", "name": "Kryształ", "points": 70, "w": 74, "h": 74, "color": "#ff84ce"}, {"src": "collect_6.png", "name": "Ciasteczko", "points": 30, "w": 72, "h": 68, "color": "#e7b265"}, {"src": "collect_7.png", "name": "Dzwoneczek", "points": 55, "w": 72, "h": 72, "color": "#ffd85e"}, {"src": "collect_8.png", "name": "Kokardka", "points": 40, "w": 76, "h": 70, "color": "#ff86b8"}];
+const CHARS=[{"id": "pink", "name": "Różowa Kicia", "desc": "różowa kicia", "scale": 1.0, "sheet": "pink_sheet.png", "preview": "pink_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16}, {"id": "peach", "name": "Brzoskwiniowa Kicia", "desc": "brzoskwiniowa kicia", "scale": 1.0, "sheet": "peach_sheet.png", "preview": "peach_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16}, {"id": "black", "name": "Czarna Kicia", "desc": "czarno-biała kicia", "scale": 1.0, "sheet": "black_sheet.png", "preview": "black_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16}, {"id": "lavender", "name": "Lawendowa Kicia", "desc": "lawendowa kicia", "scale": 1.0, "sheet": "lavender_sheet.png", "preview": "lavender_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16}, {"id": "rufi", "name": "Rufi", "desc": "Rufi", "scale": 1.1, "sheet": "rufi_sheet.png", "preview": "rufi_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16}, {"id": "girlRufi", "name": "Ona + Rufi", "desc": "ona jedzie na Rufim", "scale": 1.24, "sheet": "girlRufi_sheet.png", "preview": "girlRufi_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16}], MAPS=[{"name": "Kwitnąca dolina", "src": "map_1.webp", "fx": "petals"}, {"name": "Plaża", "src": "map_2.webp", "fx": "bubbles"}, {"name": "Noc nad jeziorem", "src": "map_3.webp", "fx": "fireflies"}, {"name": "Miasteczko", "src": "map_4.webp", "fx": "petals"}, {"name": "Sakura", "src": "map_5.webp", "fx": "petals"}, {"name": "Zachód słońca", "src": "map_6.webp", "fx": "bubbles"}, {"name": "Księżycowa kraina", "src": "map_7.webp", "fx": "fireflies"}], OBSTACLES=[{"src": "obstacle_0.png", "name": "kałuża", "w": 166, "h": 74, "hit": 0.58}, {"src": "obstacle_1.png", "name": "poduszka", "w": 132, "h": 92, "hit": 0.7}, {"src": "obstacle_2.png", "name": "doniczka", "w": 112, "h": 126, "hit": 0.7}, {"src": "obstacle_3.png", "name": "klocki", "w": 130, "h": 116, "hit": 0.7}, {"src": "obstacle_4.png", "name": "miękka kostka", "w": 132, "h": 124, "hit": 0.72}, {"src": "obstacle_5.png", "name": "stołeczek", "w": 124, "h": 112, "hit": 0.7}, {"src": "obstacle_6.png", "name": "rozlana woda", "w": 170, "h": 84, "hit": 0.58}, {"src": "obstacle_7.png", "name": "kocia poducha", "w": 142, "h": 88, "hit": 0.68}, {"src": "obstacle_8.png", "name": "koszyk", "w": 136, "h": 126, "hit": 0.72}], UPPER_OBSTACLES=[{"src": "upper_0.png", "w": 122, "h": 132, "hit": 0.62}, {"src": "upper_1.png", "w": 102, "h": 126, "hit": 0.62}, {"src": "upper_2.png", "w": 116, "h": 122, "hit": 0.62}, {"src": "upper_3.png", "w": 108, "h": 118, "hit": 0.62}, {"src": "upper_4.png", "w": 122, "h": 126, "hit": 0.62}, {"src": "upper_5.png", "w": 106, "h": 116, "hit": 0.62}, {"src": "upper_6.png", "w": 126, "h": 118, "hit": 0.62}, {"src": "upper_7.png", "w": 110, "h": 126, "hit": 0.62}, {"src": "upper_8.png", "w": 118, "h": 132, "hit": 0.62}], COLLECTIBLES=[{"src": "collect_0.png", "name": "Serduszko", "points": 25, "w": 72, "h": 70, "color": "#ff75a9"}, {"src": "collect_1.png", "name": "Prezent", "points": 60, "w": 78, "h": 78, "color": "#ffd06d"}, {"src": "collect_2.png", "name": "Rybka", "points": 45, "w": 82, "h": 66, "color": "#69d4ff"}, {"src": "collect_3.png", "name": "Włóczka", "points": 35, "w": 76, "h": 72, "color": "#bc8cff"}, {"src": "collect_4.png", "name": "Gwiazdka", "points": 50, "w": 74, "h": 74, "color": "#ffe06b"}, {"src": "collect_5.png", "name": "Kryształ", "points": 70, "w": 74, "h": 74, "color": "#ff84ce"}, {"src": "collect_6.png", "name": "Ciasteczko", "points": 30, "w": 72, "h": 68, "color": "#e7b265"}, {"src": "collect_7.png", "name": "Dzwoneczek", "points": 55, "w": 72, "h": 72, "color": "#ffd85e"}, {"src": "collect_8.png", "name": "Kokardka", "points": 40, "w": 76, "h": 70, "color": "#ff86b8"}];
 const STORE='kicia_rufi_runner_v7';
 let app={character:'pink',best:0,animFps:7};
 try{Object.assign(app,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}
-app.animFps=Math.max(5,Math.min(16,Number(app.animFps)||8));
+app.animFps=7;
 const save=()=>localStorage.setItem(STORE,JSON.stringify(app));
 
 const images=new Map();
 const INTRO_ASSETS=['birthday_intro.webp'];
-const allSources=[...CHARS.flatMap(c=>c.frames),...MAPS.map(m=>m.src),...OBSTACLES.map(o=>o.src),...UPPER_OBSTACLES.map(o=>o.src),...COLLECTIBLES.map(c=>c.src),...INTRO_ASSETS];
+const allSources=[...CHARS.flatMap(c=>[c.sheet,c.preview]),...MAPS.map(m=>m.src),...OBSTACLES.map(o=>o.src),...UPPER_OBSTACLES.map(o=>o.src),...COLLECTIBLES.map(c=>c.src),...INTRO_ASSETS];
 let loaded=0;
 function loadImage(src){
  if(images.has(src)) return Promise.resolve(images.get(src));
@@ -185,7 +191,7 @@ function renderChars(){
  grid.innerHTML='';
  CHARS.forEach(c=>{
   const el=document.createElement('div');el.className='card'+(c.id===selected.id?' active':'');
-  el.innerHTML='<div class="check">✓</div><div class="preview"><img src="'+c.frames[1]+'" alt=""></div><strong>'+c.name+'</strong><small>'+c.desc+'</small>';
+  el.innerHTML='<div class="check">✓</div><div class="preview"><img src="'+c.preview+'" alt=""></div><strong>'+c.name+'</strong><small>'+c.desc+'</small>';
   el.onclick=()=>{selected=c;app.character=c.id;save();renderChars();updateChoice()};
   grid.appendChild(el);
  });
@@ -194,21 +200,21 @@ function renderChars(){
 function updateChoice(){document.getElementById('choiceName').textContent=selected.name;document.getElementById('choiceDesc').textContent=selected.desc}
 renderChars();
 
-function feel(v){if(v<=5)return'Bardzo spokojnie';if(v<=7)return'Naturalnie';if(v<=9)return'Żwawiej';if(v<=12)return'Płynniej';if(v<=14)return'Bardzo płynnie';return'Maks płynność'}
+function feel(v){if(v<=5)return'Bardzo spokojnie';if(v<=7)return'Naturalnie';if(v<=9)return'Żwawiej';if(v<=12)return'Płynniej';return'Szybko'}
 const fpsSlider=document.getElementById('fpsSlider'),fpsValue=document.getElementById('fpsValue'),fpsFeel=document.getElementById('fpsFeel');
 function setAnimFps(v){
- app.animFps=Math.max(5,Math.min(16,Number(v)||8));fpsSlider.value=app.animFps;fpsValue.textContent=app.animFps+' FPS';fpsFeel.textContent=feel(app.animFps);document.getElementById('gameFpsLabel').textContent=app.animFps+' FPS';document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('on',Number(b.dataset.v)===app.animFps));save()
+ app.animFps=Math.max(5,Math.min(10,Number(v)||7));fpsSlider.value=app.animFps;fpsValue.textContent=app.animFps+' FPS';fpsFeel.textContent=feel(app.animFps);document.getElementById('gameFpsLabel').textContent=app.animFps+' FPS';document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('on',Number(b.dataset.v)===app.animFps));save()
 }
 fpsSlider.oninput=e=>setAnimFps(e.target.value);
 document.querySelectorAll('.preset').forEach(b=>b.onclick=()=>setAnimFps(b.dataset.v));
-setAnimFps(app.animFps||8);
+setAnimFps(app.animFps);
 document.getElementById('random').onclick=()=>{selected=CHARS[Math.floor(Math.random()*CHARS.length)];app.character=selected.id;save();renderChars()};
 
 const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('stage');
 let W=960,H=540,running=false,paused=false,last=0,elapsed=0,score=0,targetScore=0,speed=325,ground=420;
-let player={x:110,y:0,w:138,h:111,vy:0,onGround:true,coyote:0,buffer:0,hold:false,anim:0,landing:0};
+let player={x:110,y:0,w:138,h:111,vy:0,onGround:true,coyote:0,buffer:0,hold:false,anim:0,airAnim:0,landing:0,jumpAssist:0,jumpGrace:0};
 let obstacles=[],pickups=[],particles=[],texts=[],spawnT=0,nextSpawn=1.4,pickT=0,nextPick=2.7,mapIndex=0,nextMap=1,mapBase=0,mapMix=0,mapChanging=false,fpsFrames=0,fpsTime=0,lastM=0;
-const GRAVITY_DESKTOP=1840,GRAVITY_MOBILE=1540,JUMP_DESKTOP=-735,JUMP_MOBILE=-835,COYOTE=.21,BUFFER=.22,MAP_STEP=500;
+const GRAVITY_DESKTOP=1840,GRAVITY_MOBILE=1480,JUMP_DESKTOP=-735,JUMP_MOBILE=-900,COYOTE=.24,BUFFER=.25,MAP_STEP=500;
 
 function img(src){return images.get(src)}
 function resize(){
@@ -217,7 +223,7 @@ function resize(){
 }
 addEventListener('resize',resize);
 function setHud(){
- document.getElementById('gameName').textContent=selected.name;document.getElementById('bottomName').textContent=selected.name;document.getElementById('best').textContent=Math.floor(app.best);document.getElementById('avatarImg').src=selected.frames[1];
+ document.getElementById('gameName').textContent=selected.name;document.getElementById('bottomName').textContent=selected.name;document.getElementById('best').textContent=Math.floor(app.best);document.getElementById('avatarImg').src=selected.preview;
  document.getElementById('dots').innerHTML=MAPS.map((_,i)=>'<i class="'+(i===mapIndex?'on':'')+'"></i>').join('')
 }
 function mapToast(){const e=document.getElementById('mapName');e.textContent='Mapa: '+MAPS[mapIndex].name;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1350);setHud()}
@@ -233,7 +239,7 @@ function startGame(){
  document.getElementById('gameOver').classList.add('hidden');document.getElementById('pauseOverlay').classList.add('hidden');
  requestAnimationFrame(()=>{resize();reset();setHud();draw();mapToast();if(selected.id==='girlRufi')startBirthdayIntro();else startGameplay(isMobile()?3.10:2.25)})
 }
-function reset(){elapsed=0;score=0;targetScore=0;speed=325;obstacles=[];pickups=[];particles=[];texts=[];spawnT=0;nextSpawn=1.38;pickT=0;nextPick=2.7;mapIndex=0;nextMap=1;mapBase=0;mapMix=0;mapChanging=false;lastM=0;player.vy=0;player.onGround=true;player.coyote=COYOTE;player.buffer=0;player.hold=false;player.anim=0;player.landing=0;player.y=ground-player.h;document.getElementById('score').textContent='0';document.getElementById('hint').style.opacity='1'}
+function reset(){elapsed=0;score=0;targetScore=0;speed=325;obstacles=[];pickups=[];particles=[];texts=[];spawnT=0;nextSpawn=1.38;pickT=0;nextPick=2.7;mapIndex=0;nextMap=1;mapBase=0;mapMix=0;mapChanging=false;lastM=0;player.vy=0;player.onGround=true;player.coyote=COYOTE;player.buffer=0;player.hold=false;player.anim=0;player.airAnim=0;player.landing=0;player.jumpAssist=0;player.jumpGrace=0;player.y=ground-player.h;document.getElementById('score').textContent='0';document.getElementById('hint').style.opacity='1'}
 function askJump(){
  if(!running||paused)return;
  document.getElementById('hint').style.opacity='0';
@@ -254,16 +260,24 @@ stage.addEventListener('pointerdown',e=>{
 stage.addEventListener('pointerup',e=>{if(e.pointerType!=='touch')releaseJump()},{passive:false});
 stage.addEventListener('pointercancel',e=>{if(e.pointerType!=='touch')releaseJump()},{passive:false});
 stage.addEventListener('touchstart',e=>{
- if(e.target.closest&&e.target.closest('button'))return;
+ if(e.target.closest&&e.target.closest('button,.overlay,.birthdayIntro'))return;
  e.preventDefault();askJump()
 },{passive:false});
-stage.addEventListener('touchend',e=>{e.preventDefault();releaseJump()},{passive:false});
-stage.addEventListener('touchcancel',e=>{e.preventDefault();releaseJump()},{passive:false});
+stage.addEventListener('touchend',e=>{
+ if(e.target.closest&&e.target.closest('button,.overlay,.birthdayIntro'))return;
+ e.preventDefault();releaseJump()
+},{passive:false});
+stage.addEventListener('touchcancel',e=>{
+ if(e.target.closest&&e.target.closest('button,.overlay,.birthdayIntro'))return;
+ e.preventDefault();releaseJump()
+},{passive:false});
 ['contextmenu','selectstart','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{
  if(document.body.classList.contains('game-active'))e.preventDefault()
 },{passive:false}));
 document.addEventListener('touchmove',e=>{
- if(document.body.classList.contains('game-active'))e.preventDefault()
+ if(!document.body.classList.contains('game-active'))return;
+ if(e.target.closest&&e.target.closest('button,.overlay,.birthdayIntro'))return;
+ e.preventDefault()
 },{passive:false});
 addEventListener('keydown',e=>{
  if((e.code==='Space'||e.code==='ArrowUp')&&running){e.preventDefault();askJump()}
@@ -271,10 +285,10 @@ addEventListener('keydown',e=>{
 addEventListener('keyup',e=>{
  if(e.code==='Space'||e.code==='ArrowUp')releaseJump()
 });
-function jump(){player.vy=isMobile()?JUMP_MOBILE:JUMP_DESKTOP;player.onGround=false;player.coyote=0;player.buffer=0;for(let i=0;i<7;i++)particles.push({x:player.x+player.w*.43,y:ground-3,vx:-38-Math.random()*72,vy:-28-Math.random()*62,life:.5,s:2+Math.random()*3,type:'dust'})}
+function jump(){player.vy=isMobile()?JUMP_MOBILE:JUMP_DESKTOP;player.onGround=false;player.airAnim=0;player.jumpAssist=isMobile()?.18:0;player.jumpGrace=isMobile()?.16:0;player.coyote=0;player.buffer=0;for(let i=0;i<7;i++)particles.push({x:player.x+player.w*.43,y:ground-3,vx:-38-Math.random()*72,vy:-28-Math.random()*62,life:.5,s:2+Math.random()*3,type:'dust'})}
 function spawnGroundObstacle(off=0,sc=1){
  const d=OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)];
- const mobileScale=isMobile()?.84:1;
+ const mobileScale=isMobile()?.76:1;
  const s=(.96+Math.random()*.08)*sc*mobileScale;
  const w=d.w*s,h=d.h*s;
  // Wkładamy dolną część grafiki w ziemię zamiast stawiać ją "na" ziemi.
@@ -305,14 +319,14 @@ function spawnPattern(){
 }
 function spawnPickup(){const d=COLLECTIBLES[Math.floor(Math.random()*COLLECTIBLES.length)],y=ground-d.h-(72+Math.random()*95);pickups.push({d,x:W+90,y,w:d.w,h:d.h,state:'world',t:0,scale:1})}
 function hit(a,o,ratio=.68){
- const m=isMobile(),pw=m?.40:.47,ph=m?.56:.66;
+ const m=isMobile(),pw=m?.36:.47,ph=m?.50:.66;
  const ax=a.x+a.w*(1-pw)/2,ay=a.y+a.h*(1-ph)*.60,aw=a.w*pw,ah=a.h*ph;
  if(o.kind==='upper'){
   const pr=m?.54:.60,ox=o.x+o.w*(1-pr)/2,oy=o.y+o.h*.13,ow=o.w*pr,oh=o.h*.69;
   return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy
  }
  const visibleH=o.h-(o.sink||0);
- const pr=m?.55:ratio,ox=o.x+o.w*(1-pr)/2,oy=o.y+visibleH*(1-pr),ow=o.w*pr,oh=visibleH*pr;
+ const pr=m?.48:ratio,ox=o.x+o.w*(1-pr)/2,oy=o.y+visibleH*(1-pr),ow=o.w*pr,oh=visibleH*pr;
  return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy
 }
 function collect(p){
@@ -357,18 +371,17 @@ function finishBirthdayIntro(){
   startGameplay(isMobile()?3.15:2.35)
  },580)
 }
-birthdaySkip.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()},{passive:false});
-birthdaySkip.onclick=finishBirthdayIntro;
+
 function loop(t){
  if(!running)return;if(paused){last=t;requestAnimationFrame(loop);return}
  const dt=Math.min(.033,(t-last)/1000||0);last=t;elapsed+=dt;targetScore+=dt*10;
  const difficulty=Math.min(1,score/3600),reaction=isMobile()?(3.05-1.05*difficulty):(2.30-.82*difficulty);
- speed=Math.max(118,(W-player.x-player.w*.15)/reaction);player.anim+=dt;player.landing=Math.max(0,player.landing-dt);
+ speed=Math.max(118,(W-player.x-player.w*.15)/reaction);player.anim+=dt;if(!player.onGround)player.airAnim+=dt;player.landing=Math.max(0,player.landing-dt);player.jumpAssist=Math.max(0,player.jumpAssist-dt);player.jumpGrace=Math.max(0,player.jumpGrace-dt);
  fpsFrames++;fpsTime+=dt;if(fpsTime>.5){document.getElementById('fps').textContent='FPS: '+Math.round(fpsFrames/fpsTime);fpsFrames=0;fpsTime=0}
- player.coyote=player.onGround?COYOTE:Math.max(0,player.coyote-dt);player.buffer=Math.max(0,player.buffer-dt);if(player.buffer>0&&player.coyote>0)jump();const gravity=isMobile()?GRAVITY_MOBILE:GRAVITY_DESKTOP;player.vy+=(player.hold&&player.vy<0?gravity*.72:gravity)*dt;player.y+=player.vy*dt;
+ player.coyote=player.onGround?COYOTE:Math.max(0,player.coyote-dt);player.buffer=Math.max(0,player.buffer-dt);if(player.buffer>0&&player.coyote>0)jump();const gravity=isMobile()?GRAVITY_MOBILE:GRAVITY_DESKTOP;const risingAssist=player.vy<0&&(player.hold||player.jumpAssist>0);player.vy+=(risingAssist?gravity*.62:gravity)*dt;player.y+=player.vy*dt;
  if(player.y>=ground-player.h){const air=!player.onGround;player.y=ground-player.h;player.vy=0;player.onGround=true;if(air)player.landing=.11;if(air&&player.buffer>0)jump()}else player.onGround=false;
- spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){spawnT=0;spawnPattern();nextSpawn=Math.max(isMobile()?1.45:.88,(isMobile()?1.98:1.46)-difficulty*.44)+Math.random()*(isMobile()?.55:.36)}if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
- obstacles.forEach(e=>e.x-=speed*dt);obstacles=obstacles.filter(e=>e.x+e.w>-180);for(const e of obstacles){if(hit(player,e,e.d.hit)){gameOver();draw();return}}
+ spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){spawnT=0;spawnPattern();nextSpawn=Math.max(isMobile()?1.58:.88,(isMobile()?2.12:1.46)-difficulty*.40)+Math.random()*(isMobile()?.58:.36)}if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
+ obstacles.forEach(e=>e.x-=speed*dt);obstacles=obstacles.filter(e=>e.x+e.w>-180);for(const e of obstacles){const takeoffForgiveness=isMobile()&&e.kind==='ground'&&player.jumpGrace>0&&player.vy<0;if(!takeoffForgiveness&&hit(player,e,e.d.hit)){gameOver();draw();return}}
  for(const p of pickups){if(p.state==='world'){p.x-=speed*dt;if(hit(player,p,.56))collect(p)}else if(p.state==='fly'){p.t=Math.min(1,p.t+dt/.43);const q=1-Math.pow(1-p.t,3),arc=-76*Math.sin(Math.PI*p.t);p.x=p.sx+(p.tx-p.sx)*q;p.y=p.sy+(p.ty-p.sy)*q+arc;p.scale=1-.53*q;if(p.t>=1)arrive(p)}}
  pickups=pickups.filter(p=>p.state!=='done'&&p.x+p.w>-130);
  score+=(targetScore-score)*Math.min(1,dt*10.5);if(Math.abs(targetScore-score)<.02)score=targetScore;document.getElementById('score').textContent=Math.floor(score);
@@ -384,29 +397,29 @@ function updateFX(dt){
 }
 function drawBg(image,progress,alpha){if(!image)return;const ir=image.naturalWidth/image.naturalHeight,cr=W/H;let sw,sh,sx,sy;if(ir>cr){sh=image.naturalHeight;sw=sh*cr;sx=(image.naturalWidth-sw)*Math.max(0,Math.min(1,progress));sy=0}else{sw=image.naturalWidth;sh=sw/cr;sx=0;sy=(image.naturalHeight-sh)/2}ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(image,sx,sy,sw,sh,0,0,W,H);ctx.restore()}
 function drawContain(image,x,y,w,h,alpha=1){if(!image)return;const r=Math.min(w/image.naturalWidth,h/image.naturalHeight),dw=image.naturalWidth*r,dh=image.naturalHeight*r;ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(image,x+(w-dw)/2,y+(h-dh)/2,dw,dh);ctx.restore()}
-function drawContainFx(image,x,y,w,h,{alpha=1,scaleX=1,scaleY=1,rot=0}={}){
- if(!image)return;const r=Math.min(w/image.naturalWidth,h/image.naturalHeight),dw=image.naturalWidth*r,dh=image.naturalHeight*r,cx=x+w/2,cy=y+h/2;
- ctx.save();ctx.translate(cx,cy);ctx.rotate(rot);ctx.scale(scaleX,scaleY);ctx.globalAlpha=alpha;ctx.drawImage(image,-dw/2,-dh/2,dw,dh);ctx.restore()
+function drawSpriteCell(image,frame,x,y,w,h,alpha=1){
+ if(!image)return;
+ const cols=4,rows=4,sw=image.naturalWidth/cols,sh=image.naturalHeight/rows;
+ const col=frame%cols,row=Math.floor(frame/cols);
+ const r=Math.min(w/sw,h/sh),dw=sw*r,dh=sh*r;
+ ctx.save();ctx.globalAlpha=alpha;
+ ctx.drawImage(image,col*sw,row*sh,sw,sh,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
+ ctx.restore()
 }
-function playerBlendState(){
+function playerFrame(){
+ // 16 REAL generated images. At 7 FPS the browser swaps one actual sprite every ~143 ms.
  if(!player.onGround){
-  const rise=Math.max(-1,Math.min(1,player.vy/620));
-  return{a:6,b:7,mix:(rise+1)/2,bob:-1.2,rot:Math.max(-.22,Math.min(.26,player.vy/3200)),sx:1+Math.abs(player.vy)*0.00006,sy:1-Math.abs(player.vy)*0.000045}
+   // Use a different part of the generated 16-pose sequence while rising / falling.
+   const seq=player.vy<0?[3,4,5,6,7,8]:[9,10,11,12,13,14];
+   return seq[Math.min(seq.length-1,Math.floor(player.airAnim*app.animFps)%seq.length)]
  }
- if(player.landing>0){
-  const t=1-Math.max(0,Math.min(1,player.landing/.11));
-  return{a:7,b:0,mix:t,bob:Math.sin(t*Math.PI)*1.2,rot:(1-t)*.03,sx:1+.03*(1-t),sy:1-.03*(1-t)}
- }
- const seq=[0,1,2,3,4,5,4,3,2,1];
- const phase=player.anim*(app.animFps*.92),base=Math.floor(phase)%seq.length,mix=phase-Math.floor(phase);
- const stride=Math.sin((phase/seq.length)*Math.PI*2);
- return{a:seq[base],b:seq[(base+1)%seq.length],mix,bob:stride*1.15,rot:stride*.018,sx:1+Math.max(0,stride)*.012,sy:1-Math.max(0,-stride)*.012}
+ if(player.landing>0)return 15;
+ return Math.floor(player.anim*app.animFps)%16
 }
 function drawPlayer(){
- ctx.save();ctx.globalAlpha=player.onGround?.10:.05;ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(player.x+player.w*.49,ground+4,player.w*.26,Math.max(4,player.h*.045),0,0,Math.PI*2);ctx.fill();ctx.restore();
- const s=playerBlendState(),a=img(selected.frames[s.a]),b=img(selected.frames[s.b]),py=player.y+(s.bob||0),fx={alpha:1-(s.mix||0),scaleX:s.sx||1,scaleY:s.sy||1,rot:s.rot||0};
- drawContainFx(a,player.x,py,player.w,player.h,fx);
- if((s.mix||0)>.001&&b)drawContainFx(b,player.x,py,player.w,player.h,{alpha:s.mix,scaleX:s.sx||1,scaleY:s.sy||1,rot:s.rot||0})
+ const frame=playerFrame();
+ const bob=player.onGround?Math.sin(player.anim*app.animFps*Math.PI/4)*.45:0;
+ drawSpriteCell(img(selected.sheet),frame,player.x,player.y+bob,player.w,player.h)
 }
 function draw(){
  ctx.clearRect(0,0,W,H);drawBg(img(MAPS[mapIndex].src),mapProgress(),1);if(mapChanging)drawBg(img(MAPS[nextMap].src),0,mapMix);
@@ -419,25 +432,10 @@ function draw(){
    ctx.moveTo(e.x+e.w*.5,0);ctx.lineTo(e.x+e.w*.5,e.y+sway+10);ctx.stroke();ctx.restore();
    drawContain(img(e.d.src),e.x,e.y+sway,e.w,e.h)
   }else{
-   // Bardzo subtelny cień kontaktowy, żeby przeszkoda nie wyglądała jak przyklejona naklejka.
-   ctx.save();
-   ctx.globalAlpha=.07;ctx.fillStyle='#000';
-   ctx.beginPath();ctx.ellipse(e.x+e.w*.5,ground-.5,e.w*.24,Math.max(3,e.h*.03),0,0,Math.PI*2);ctx.fill();
-   ctx.restore();
-
-   // Dolna część grafiki jest schowana pod linią ziemi.
+   // Przeszkoda jest osadzona w ziemi. Bez sztucznego czarnego cienia.
    ctx.save();
    ctx.beginPath();ctx.rect(0,0,W,ground+1);ctx.clip();
    drawContain(img(e.d.src),e.x,e.y,e.w,e.h);
-   ctx.restore();
-
-   // Lekka miękka poświata przy bazie zamiast ciężkiego cienia.
-   ctx.save();
-   const baseGrad=ctx.createLinearGradient(0,ground-8,0,ground+1);
-   baseGrad.addColorStop(0,'rgba(0,0,0,0)');
-   baseGrad.addColorStop(1,'rgba(0,0,0,.08)');
-   ctx.fillStyle=baseGrad;
-   ctx.fillRect(e.x+e.w*.20,ground-8,e.w*.60,9);
    ctx.restore()
   }
  }
@@ -446,11 +444,37 @@ function draw(){
  for(const f of texts){ctx.save();ctx.globalAlpha=Math.min(1,f.life*2.2);ctx.fillStyle=f.color;ctx.font='900 18px Inter,system-ui,sans-serif';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=8;ctx.fillText(f.text,f.x,f.y);ctx.restore()}
 }
 function goChars(){running=false;paused=false;clearTimeout(birthdayTimer);birthdayIntro.classList.add('hidden');birthdayIntro.classList.remove('fade');upperNotice.classList.remove('show');gameScreen.classList.remove('game-active');document.body.classList.remove('game-active');document.documentElement.classList.remove('game-active');gameScreen.classList.add('hidden');select.classList.remove('hidden');renderChars()}
-document.getElementById('start').onclick=()=>{startGame()};
-document.getElementById('again').onclick=()=>{document.getElementById('gameOver').classList.add('hidden');resize();reset();startGameplay(isMobile()?3.05:2.25)};
-document.getElementById('pause').onclick=()=>{if(!running)return;paused=true;document.getElementById('pauseOverlay').classList.remove('hidden')};
-document.getElementById('resume').onclick=()=>{document.getElementById('pauseOverlay').classList.add('hidden');paused=false;last=performance.now()};
-document.getElementById('characters').onclick=goChars;document.getElementById('characters2').onclick=goChars;document.getElementById('back').onclick=goChars;
+function bindTap(id,fn){
+ const el=document.getElementById(id);if(!el)return;
+ let last=0;
+ const shield=e=>{e.stopPropagation()};
+ const fire=e=>{
+   const now=performance.now();
+   if(now-last<320){if(e)e.preventDefault();return}
+   last=now;
+   if(e){e.preventDefault();e.stopPropagation()}
+   fn()
+ };
+ el.addEventListener('touchstart',shield,{passive:true});
+ el.addEventListener('pointerdown',shield,{passive:true});
+ el.addEventListener('touchend',fire,{passive:false});
+ el.addEventListener('pointerup',e=>{
+   if(e.pointerType==='touch')return;
+   fire(e)
+ },{passive:false});
+ el.addEventListener('click',e=>{
+   if(performance.now()-last<500){e.preventDefault();e.stopPropagation();return}
+   fire(e)
+ },{passive:false})
+}
+bindTap('start',()=>startGame());
+bindTap('birthdaySkip',()=>finishBirthdayIntro());
+bindTap('again',()=>{document.getElementById('gameOver').classList.add('hidden');resize();reset();startGameplay(isMobile()?3.05:2.25)});
+bindTap('pause',()=>{if(!running)return;paused=true;document.getElementById('pauseOverlay').classList.remove('hidden')});
+bindTap('resume',()=>{document.getElementById('pauseOverlay').classList.add('hidden');paused=false;last=performance.now()});
+bindTap('characters',goChars);
+bindTap('characters2',goChars);
+bindTap('back',goChars);
 </script>
 </body>
 </html>
