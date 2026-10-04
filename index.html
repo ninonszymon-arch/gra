@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#140a19">
-<title>Kicia & Rufi Runner V8.3</title>
+<title>Kicia & Rufi Runner V8.4</title>
 <style>
 :root{
  --bg:#0b0710;--panel:#1b1121;--line:rgba(255,255,255,.11);
@@ -64,25 +64,72 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
  .wrap{width:calc(100% - 4px)}#gameScreen{align-items:flex-start;padding-top:3px}.game{border-radius:20px}.top{grid-template-columns:1fr auto auto;padding:8px}.top .counter:nth-of-type(2){display:none}.title span{display:none}.counter{min-width:64px;padding:6px}.stage{height:62svh;min-height:430px}#canvas{height:100%;aspect-ratio:auto;max-height:none}.dots{display:none}.hint{font-size:.69rem}
 }
 
-/* ===== V8.3 PHONE + IN-GAME SCENE ===== */
-html.game-active,body.game-active{overflow:hidden!important;overscroll-behavior:none!important;height:100%;}
-body.game-active{position:fixed;inset:0;width:100%;}
-body.game-active *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;}
-#gameScreen.game-active,#gameScreen.game-active .stage,#gameScreen.game-active canvas{touch-action:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;}
-.introSkip{position:absolute;z-index:20;top:12px;right:12px;border:1px solid rgba(255,255,255,.28);background:rgba(10,7,13,.58);color:#fff;border-radius:999px;padding:10px 15px;font-weight:850;backdrop-filter:blur(9px);opacity:0;pointer-events:none;transition:.18s;box-shadow:0 8px 28px rgba(0,0,0,.25)}
-.introSkip.show{opacity:1;pointer-events:auto}
-.introVeil{position:absolute;z-index:7;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 55%,transparent 30%,rgba(12,6,15,.12) 100%);opacity:0;transition:.3s}.introVeil.show{opacity:1}
+
+/* ===== V8.4 MOBILE + BIRTHDAY INTRO ===== */
+html.game-active,body.game-active{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+  height:100%;
+}
+body.game-active{position:fixed;inset:0;width:100%}
+body.game-active *{
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+  -webkit-user-drag:none!important;
+}
+#gameScreen.game-active,#gameScreen.game-active .stage,#gameScreen.game-active canvas{
+  touch-action:none!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+}
+.birthdayIntro{
+  position:absolute;z-index:30;inset:0;overflow:hidden;
+  background:#351521 url('birthday_intro.webp') center/cover no-repeat;
+  opacity:1;transition:opacity .62s ease;
+}
+.birthdayIntro.fade{opacity:0;pointer-events:none}
+.birthdaySkip{
+  position:absolute;right:12px;top:12px;z-index:35;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(44,18,34,.58);color:#fff;
+  border-radius:999px;padding:10px 15px;font-weight:850;
+  backdrop-filter:blur(10px);box-shadow:0 8px 28px rgba(0,0,0,.24)
+}
+.roseFall{
+  position:absolute;z-index:32;top:-12%;pointer-events:none;
+  filter:drop-shadow(0 5px 8px rgba(75,0,25,.2));
+  animation:roseDrop linear forwards;
+}
+@keyframes roseDrop{
+  0%{transform:translate3d(0,-8vh,0) rotate(0deg);opacity:0}
+  7%{opacity:1}
+  100%{transform:translate3d(var(--drift),118vh,0) rotate(var(--spin));opacity:.94}
+}
+.ceilingWarn{
+  position:absolute;z-index:6;right:12px;top:12px;
+  border-radius:999px;padding:7px 10px;
+  background:rgba(20,9,22,.5);border:1px solid rgba(255,255,255,.10);
+  color:#f5dce7;font-size:.68rem;pointer-events:none;
+  opacity:0;transition:.25s
+}
+.ceilingWarn.show{opacity:1}
 @media(max-width:760px){
- html,body{height:100%;}
- #gameScreen{padding:0!important;min-height:100dvh!important;height:100dvh!important;align-items:stretch!important;}
- #gameScreen .wrap{width:100%!important;height:100%!important;margin:0!important;}
- #gameScreen .game{width:100%!important;height:100%!important;min-height:100dvh!important;border-radius:0!important;border:0!important;display:flex!important;flex-direction:column!important;}
- #gameScreen .top{flex:0 0 auto;padding-top:max(8px,env(safe-area-inset-top))!important;}
- #gameScreen .stage{flex:1 1 auto!important;height:auto!important;min-height:0!important;}
- #gameScreen #canvas{height:100%!important;width:100%!important;max-height:none!important;aspect-ratio:auto!important;}
- #gameScreen .bottom{flex:0 0 auto;padding-bottom:max(8px,env(safe-area-inset-bottom))!important;}
- .introSkip{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));}
- .hint{bottom:18px!important;}
+ html,body{height:100%}
+ #gameScreen{padding:0!important;min-height:100dvh!important;height:100dvh!important;align-items:stretch!important}
+ #gameScreen .wrap{width:100%!important;height:100%!important;margin:0!important}
+ #gameScreen .game{
+   width:100%!important;height:100%!important;min-height:100dvh!important;
+   border-radius:0!important;border:0!important;display:flex!important;flex-direction:column!important
+ }
+ #gameScreen .top{flex:0 0 auto;padding-top:max(8px,env(safe-area-inset-top))!important}
+ #gameScreen .stage{flex:1 1 auto!important;height:auto!important;min-height:0!important}
+ #gameScreen #canvas{height:100%!important;width:100%!important;max-height:none!important;aspect-ratio:auto!important}
+ #gameScreen .bottom{flex:0 0 auto;padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
+ .birthdaySkip{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right))}
+ .hint{bottom:18px!important}
+ .ceilingWarn{top:max(9px,env(safe-area-inset-top));right:70px}
 }
 
 </style>
@@ -93,7 +140,7 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
  <div class="head">
   <div class="tag"><i></i> wybierz postać</div>
   <h1>Kicia & <em>Rufi</em> Runner</h1>
-  <p>V8.3 — poprawiona wersja na telefon + specjalna scenka w samej grze dla „Ona + Rufi”.</p>
+  <p>V8.4 — pewniejszy skok na telefonie, przeszkody dolne i górne oraz urodzinowe wejście dla „Ona + Rufi”.</p>
   <div class="loader"><i id="loadbar"></i></div><div id="loadtxt" class="loadtxt">Ładowanie grafik...</div>
  </div>
  <div id="grid" class="grid"></div>
@@ -116,11 +163,13 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
  </div>
  <div id="stage" class="stage">
   <canvas id="canvas"></canvas>
-  <div id="hint" class="hint">Dotknij / kliknij = skok</div>
+  <div id="hint" class="hint">Dotknij = skok • uważaj też na przeszkody z góry</div>
   <div id="mapName" class="mapName"></div>
   <div id="fps" class="fps">FPS: --</div>
-  <button id="introSkip" class="introSkip">Pomiń ›</button>
-  <div id="introVeil" class="introVeil"></div>
+  <div id="birthdayIntro" class="birthdayIntro hidden">
+    <button id="birthdaySkip" class="birthdaySkip">Pomiń ›</button>
+  </div>
+  <div id="ceilingWarn" class="ceilingWarn">Uwaga: przeszkody też z góry</div>
   <div id="milestone" class="milestone">Nagroda!</div>
   <div id="pauseOverlay" class="overlay hidden"><div class="over"><h2>Pauza</h2><p>Możesz wrócić albo zmienić postać.</p><button id="resume" class="btn primary">Wracam</button> <button id="characters" class="btn ghost">Postacie</button></div></div>
   <div id="gameOver" class="overlay hidden"><div class="over"><h2>Ups 😭</h2><p>Wpadłeś na przeszkodę.</p><div class="stats"><div class="stat"><b id="finalScore">0</b><span>wynik</span></div><div class="stat"><b id="finalBest">0</b><span>rekord</span></div></div><button id="again" class="btn primary">Jeszcze raz</button> <button id="characters2" class="btn ghost">Postacie</button></div></div>
@@ -138,7 +187,7 @@ app.animFps=Math.max(5,Math.min(14,Number(app.animFps)||7));
 const save=()=>localStorage.setItem(STORE,JSON.stringify(app));
 
 const images=new Map();
-const INTRO_ASSETS=['intro_boy_walk0.webp','intro_boy_walk1.webp','intro_gift.webp','intro_birthday.webp','intro_love.webp','intro_kiss.webp','intro_farewell.webp','intro_boy_leave.webp','intro_girl_rufi_flowers.webp'];
+const INTRO_ASSETS=['birthday_intro.webp'];
 const allSources=[...CHARS.flatMap(c=>c.frames),...MAPS.map(m=>m.src),...OBSTACLES.map(o=>o.src),...COLLECTIBLES.map(c=>c.src),...INTRO_ASSETS];
 let loaded=0;
 function loadImage(src){
@@ -188,7 +237,7 @@ const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),stage
 let W=960,H=540,running=false,paused=false,last=0,elapsed=0,score=0,targetScore=0,speed=325,ground=420;
 let player={x:110,y:0,w:138,h:111,vy:0,onGround:true,coyote:0,buffer:0,hold:false,anim:0,landing:0};
 let obstacles=[],pickups=[],particles=[],texts=[],spawnT=0,nextSpawn=1.4,pickT=0,nextPick=2.7,mapIndex=0,nextMap=1,mapBase=0,mapMix=0,mapChanging=false,fpsFrames=0,fpsTime=0,lastM=0;
-const GRAVITY=1840,JUMP=-715,COYOTE=.16,BUFFER=.17,MAP_STEP=500;
+const GRAVITY_DESKTOP=1840,GRAVITY_MOBILE=1540,JUMP_DESKTOP=-730,JUMP_MOBILE=-785,COYOTE=.21,BUFFER=.22,MAP_STEP=500;
 
 function img(src){return images.get(src)}
 function resize(){
@@ -207,34 +256,107 @@ function tryFullscreen(){
 }
 function startGameplay(grace=2.55){
  intro.active=false;introSkip.classList.remove('show');introVeil.classList.remove('show');
- running=true;paused=false;spawnT=0;nextSpawn=grace;pickT=0;nextPick=2.8;last=performance.now();requestAnimationFrame(loop)
+ running=true;paused=false;spawnT=0;nextSpawn=grace;pickT=0;nextPick=3.0;last=performance.now();requestAnimationFrame(loop)
 }
 function startGame(){
  select.classList.add('hidden');gameScreen.classList.remove('hidden');gameScreen.classList.add('game-active');document.body.classList.add('game-active');document.documentElement.classList.add('game-active');
  document.getElementById('gameOver').classList.add('hidden');document.getElementById('pauseOverlay').classList.add('hidden');
- requestAnimationFrame(()=>{resize();reset();setHud();mapToast();if(selected.id==='girlRufi')startRomanticIntro();else startGameplay(isMobile()?2.65:2.15)})
+ requestAnimationFrame(()=>{resize();reset();setHud();mapToast();if(selected.id==='girlRufi')startBirthdayIntro();else startGameplay(isMobile()?3.15:2.35)})
 }
 function reset(){elapsed=0;score=0;targetScore=0;speed=325;obstacles=[];pickups=[];particles=[];texts=[];spawnT=0;nextSpawn=1.38;pickT=0;nextPick=2.7;mapIndex=0;nextMap=1;mapBase=0;mapMix=0;mapChanging=false;lastM=0;player.vy=0;player.onGround=true;player.coyote=COYOTE;player.buffer=0;player.hold=false;player.anim=0;player.landing=0;player.y=ground-player.h;document.getElementById('score').textContent='0';document.getElementById('hint').style.opacity='1'}
-function askJump(){if(!running||paused)return;player.buffer=BUFFER;player.hold=true;document.getElementById('hint').style.opacity='0'}
-function releaseJump(){player.hold=false;if(player.vy<-245)player.vy*=.73}
+function askJump(){
+ if(!running||paused)return;
+ document.getElementById('hint').style.opacity='0';
+ player.hold=true;
+ // Immediate response = much less input lag on phones.
+ if(player.onGround||player.coyote>0){jump();return}
+ player.buffer=BUFFER;
+}
+function releaseJump(){
+ player.hold=false;
+ // On phones a short tap must still make a full, reliable jump.
+ if(!isMobile()&&player.vy<-260)player.vy*=.80
+}
 function isMobile(){return matchMedia('(pointer:coarse)').matches||innerWidth<=760}
-stage.addEventListener('pointerdown',e=>{if(e.target.closest&&e.target.closest('button'))return;e.preventDefault();askJump()},{passive:false});
-stage.addEventListener('pointerup',releaseJump,{passive:false});stage.addEventListener('pointercancel',releaseJump,{passive:false});addEventListener('pointerup',releaseJump,{passive:true});
-['contextmenu','selectstart','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{if(document.body.classList.contains('game-active'))e.preventDefault()},{passive:false}));
-document.addEventListener('touchmove',e=>{if(document.body.classList.contains('game-active'))e.preventDefault()},{passive:false});
-addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='ArrowUp')&&running){e.preventDefault();askJump()}});addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='ArrowUp')releaseJump()});
-function jump(){player.vy=JUMP;player.onGround=false;player.coyote=0;player.buffer=0;for(let i=0;i<7;i++)particles.push({x:player.x+player.w*.43,y:ground-3,vx:-38-Math.random()*72,vy:-28-Math.random()*62,life:.5,s:2+Math.random()*3,type:'dust'})}
-function spawnObstacle(off=0,sc=1){const d=OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)],s=(.98+Math.random()*.12)*sc,w=d.w*s,h=d.h*s;obstacles.push({d,x:W+110+off,y:ground-h,w,h})}
+
+stage.addEventListener('pointerdown',e=>{
+ if(e.pointerType==='touch')return;
+ if(e.target.closest&&e.target.closest('button'))return;
+ e.preventDefault();askJump()
+},{passive:false});
+stage.addEventListener('pointerup',e=>{if(e.pointerType!=='touch')releaseJump()},{passive:false});
+stage.addEventListener('pointercancel',e=>{if(e.pointerType!=='touch')releaseJump()},{passive:false});
+
+stage.addEventListener('touchstart',e=>{
+ if(e.target.closest&&e.target.closest('button'))return;
+ e.preventDefault();askJump()
+},{passive:false});
+stage.addEventListener('touchend',e=>{e.preventDefault();releaseJump()},{passive:false});
+stage.addEventListener('touchcancel',e=>{e.preventDefault();releaseJump()},{passive:false});
+
+['contextmenu','selectstart','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{
+ if(document.body.classList.contains('game-active'))e.preventDefault()
+},{passive:false}));
+document.addEventListener('touchmove',e=>{
+ if(document.body.classList.contains('game-active'))e.preventDefault()
+},{passive:false});
+addEventListener('keydown',e=>{
+ if((e.code==='Space'||e.code==='ArrowUp')&&running){e.preventDefault();askJump()}
+});
+addEventListener('keyup',e=>{
+ if(e.code==='Space'||e.code==='ArrowUp')releaseJump()
+});
+function jump(){player.vy=isMobile()?JUMP_MOBILE:JUMP_DESKTOP;player.onGround=false;player.coyote=0;player.buffer=0;for(let i=0;i<7;i++)particles.push({x:player.x+player.w*.43,y:ground-3,vx:-38-Math.random()*72,vy:-28-Math.random()*62,life:.5,s:2+Math.random()*3,type:'dust'})}
+function spawnGroundObstacle(off=0,sc=1){
+ const d=OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)];
+ const s=(.98+Math.random()*.10)*sc,w=d.w*s,h=d.h*s;
+ obstacles.push({kind:'ground',d,x:W+115+off,y:ground-h,w,h,phase:Math.random()*Math.PI*2})
+}
+function spawnUpperObstacle(off=0,sc=1){
+ // Cute objects hanging from the top. Staying low is safe; jumping at the wrong moment is not.
+ const pool=[OBSTACLES[1],OBSTACLES[2],OBSTACLES[7],OBSTACLES[8]];
+ const d=pool[Math.floor(Math.random()*pool.length)];
+ const s=(.82+Math.random()*.12)*sc;
+ const w=d.w*s,h=d.h*s;
+ const safeGap=isMobile()?22:16;
+ const bottom=ground-player.h-safeGap;
+ obstacles.push({
+   kind:'ceiling',d,x:W+115+off,y:bottom-h,w,h,
+   phase:Math.random()*Math.PI*2
+ })
+}
 function spawnPattern(){
- const diff=Math.min(1,score/2600),r=Math.random();
- if(score>1700&&r<.13){spawnObstacle(0,.91);spawnObstacle(isMobile()?210:245,.92)}
- else if(score>900&&r<.22){spawnObstacle(0,.94);spawnObstacle(isMobile()?185:215,.90)}
- else spawnObstacle(0,1)
+ const r=Math.random(),m=isMobile();
+ // First moments: learn the lower obstacle. Upper obstacles start a little later.
+ if(score<120){spawnGroundObstacle(0,1);return}
+ if(score<650){
+   if(r<.34)spawnUpperObstacle(0,.98);
+   else spawnGroundObstacle(0,1);
+   return
+ }
+ // Later: sometimes a sequence from top -> bottom or bottom -> top.
+ if(score>1050&&r<.13){
+   spawnUpperObstacle(0,.96);spawnGroundObstacle(m?250:290,.92)
+ }else if(score>1050&&r<.26){
+   spawnGroundObstacle(0,.92);spawnUpperObstacle(m?250:290,.96)
+ }else if(r<.40){
+   spawnUpperObstacle(0,.98)
+ }else{
+   spawnGroundObstacle(0,1)
+ }
 }
 function spawnPickup(){const d=COLLECTIBLES[Math.floor(Math.random()*COLLECTIBLES.length)],y=ground-d.h-(72+Math.random()*95);pickups.push({d,x:W+90,y,w:d.w,h:d.h,state:'world',t:0,scale:1})}
 function hit(a,o,ratio=.68){
- const m=isMobile(),pw=m?.43:.48,ph=m?.62:.68,pr=m?.60:ratio;
- const ax=a.x+a.w*(1-pw)/2,ay=a.y+a.h*(1-ph)*.58,aw=a.w*pw,ah=a.h*ph;
+ const m=isMobile(),pw=m?.40:.46,ph=m?.56:.65;
+ const ax=a.x+a.w*(1-pw)/2;
+ const ay=a.y+a.h*(1-ph)*.62;
+ const aw=a.w*pw,ah=a.h*ph;
+
+ if(o.kind==='ceiling'){
+   const ox=o.x+o.w*.18,oy=o.y+o.h*.14,ow=o.w*.64,oh=o.h*.68;
+   return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy
+ }
+ const pr=m?.55:ratio;
  const ox=o.x+o.w*(1-pr)/2,oy=o.y+o.h*(1-pr),ow=o.w*pr,oh=o.h*pr;
  return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy
 }
@@ -248,52 +370,62 @@ function gameOver(){running=false;app.best=Math.max(app.best,score);save();docum
 function startMapChange(){if(mapChanging)return;nextMap=(mapIndex+1)%MAPS.length;mapChanging=true;mapMix=0;milestone('✦ Nagroda: '+MAPS[nextMap].name+' ✦')}
 function mapProgress(){return Math.max(0,Math.min(1,(score-mapBase)/MAP_STEP))}
 
-let intro={active:false,t:0,last:0};
-const introSkip=document.getElementById('introSkip'),introVeil=document.getElementById('introVeil');
-function ease(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
-function lerp(a,b,t){return a+(b-a)*t}
-function drawSpriteGround(src,cx,maxW,maxH,alpha=1,flip=false){
- const im=img(src);if(!im)return;const r=Math.min(maxW/im.naturalWidth,maxH/im.naturalHeight),dw=im.naturalWidth*r,dh=im.naturalHeight*r,x=cx-dw/2,y=ground-dh;
- ctx.save();ctx.globalAlpha=alpha;if(flip){ctx.translate(x+dw,y);ctx.scale(-1,1);ctx.drawImage(im,0,0,dw,dh)}else ctx.drawImage(im,x,y,dw,dh);ctx.restore();
+let birthdayTimer=0;
+const birthdayIntro=document.getElementById('birthdayIntro');
+const birthdaySkip=document.getElementById('birthdaySkip');
+const ceilingWarn=document.getElementById('ceilingWarn');
+
+function makeRoseRain(){
+ birthdayIntro.querySelectorAll('.roseFall').forEach(x=>x.remove());
+ const count=isMobile()?24:34;
+ for(let i=0;i<count;i++){
+   const rose=document.createElement('div');
+   rose.className='roseFall';
+   rose.textContent=Math.random()<.30?'🌹':'🌸';
+   rose.style.left=(Math.random()*100)+'%';
+   rose.style.fontSize=(18+Math.random()*22)+'px';
+   rose.style.animationDuration=(2.5+Math.random()*2.7)+'s';
+   rose.style.animationDelay=(-Math.random()*1.8)+'s';
+   rose.style.setProperty('--drift',((Math.random()-.5)*130)+'px');
+   rose.style.setProperty('--spin',((Math.random()>.5?1:-1)*(180+Math.random()*520))+'deg');
+   birthdayIntro.appendChild(rose)
+ }
 }
-function drawIntroBase(){
- ctx.clearRect(0,0,W,H);drawBg(img(MAPS[0].src),0,1);ctx.fillStyle='rgba(10,7,12,.035)';ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(13,8,15,.10)';ctx.fillRect(0,ground,W,H-ground);ctx.fillStyle='rgba(255,255,255,.14)';ctx.fillRect(0,ground,W,2);
+function startBirthdayIntro(){
+ running=false;paused=false;
+ birthdayIntro.classList.remove('hidden','fade');
+ makeRoseRain();
+ clearTimeout(birthdayTimer);
+ birthdayTimer=setTimeout(finishBirthdayIntro,3900)
 }
-function drawIntroActualPlayer(alpha=1){const im=img(selected.frames[2]);if(im)drawContain(im,player.x,ground-player.h,player.w,player.h,alpha)}
-function fullSceneSize(){return {w:isMobile()?W*.98:Math.min(W*.74,760),h:H*.69}}
-function drawFullIntro(src,alpha=1){const s=fullSceneSize();drawSpriteGround(src,W*.50,s.w,s.h,alpha,false)}
-function startRomanticIntro(){running=false;paused=false;intro.active=true;intro.t=0;intro.last=performance.now();introSkip.classList.add('show');introVeil.classList.add('show');document.getElementById('hint').style.opacity='0';requestAnimationFrame(introLoop)}
-function finishRomanticIntro(){if(!intro.active)return;intro.active=false;introSkip.classList.remove('show');introVeil.classList.remove('show');document.getElementById('hint').style.opacity='1';startGameplay(isMobile()?2.75:2.25)}
-introSkip.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()},{passive:false});introSkip.onclick=finishRomanticIntro;
-function introLoop(now){
- if(!intro.active)return;const dt=Math.min(.04,(now-intro.last)/1000||0);intro.last=now;intro.t+=dt;const t=intro.t;drawIntroBase();
- if(t<.55){drawIntroActualPlayer(1)}
- else if(t<2.15){drawIntroActualPlayer(1);const p=ease((t-.55)/1.60),bx=W+90-(W*.64)*p,frame=(Math.floor((t-.55)*5)%2?'intro_boy_walk1.webp':'intro_boy_walk0.webp');drawSpriteGround(frame,bx,isMobile()?W*.37:210,H*.43,1,false)}
- else if(t<3.25){drawFullIntro('intro_gift.webp',1)}
- else if(t<4.25){drawFullIntro('intro_birthday.webp',1)}
- else if(t<5.25){drawFullIntro('intro_love.webp',1)}
- else if(t<6.35){drawFullIntro('intro_kiss.webp',1)}
- else if(t<7.10){drawFullIntro('intro_farewell.webp',1)}
- else if(t<8.65){const p=ease((t-7.10)/1.55),girlX=player.x+player.w*.80,boyX=lerp(W*.38,-W*.22,p);drawSpriteGround('intro_girl_rufi_flowers.webp',girlX,isMobile()?W*.50:300,H*.52,1,false);drawSpriteGround('intro_boy_leave.webp',boyX,isMobile()?W*.34:200,H*.46,1,false)}
- else if(t<9.05){const p=ease((t-8.65)/.40),girlX=player.x+player.w*.80;drawSpriteGround('intro_girl_rufi_flowers.webp',girlX,isMobile()?W*.50:300,H*.52,1-p,false);drawIntroActualPlayer(p)}
- else {finishRomanticIntro();return}
- requestAnimationFrame(introLoop)
+function finishBirthdayIntro(){
+ clearTimeout(birthdayTimer);
+ if(birthdayIntro.classList.contains('hidden'))return;
+ birthdayIntro.classList.add('fade');
+ setTimeout(()=>{
+   birthdayIntro.classList.add('hidden');
+   birthdayIntro.classList.remove('fade');
+   startGameplay(isMobile()?3.25:2.45)
+ },560)
 }
+birthdaySkip.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()},{passive:false});
+birthdaySkip.onclick=finishBirthdayIntro;
 
 function loop(t){
  if(!running)return;if(paused){last=t;requestAnimationFrame(loop);return}
  const dt=Math.min(.033,(t-last)/1000||0);last=t;elapsed+=dt;targetScore+=dt*10;
- const difficulty=Math.min(1,score/3200),reaction=isMobile()?(2.70-1.08*difficulty):(2.28-.84*difficulty);
- speed=Math.max(118,(W-player.x-player.w*.15)/reaction);player.anim+=dt;player.landing=Math.max(0,player.landing-dt);
+ const difficulty=Math.min(1,score/3600),reaction=isMobile()?(3.10-1.18*difficulty):(2.42-.88*difficulty);
+ speed=Math.max(isMobile()?94:118,(W-player.x-player.w*.15)/reaction);player.anim+=dt;player.landing=Math.max(0,player.landing-dt);
  fpsFrames++;fpsTime+=dt;if(fpsTime>.5){document.getElementById('fps').textContent='FPS: '+Math.round(fpsFrames/fpsTime);fpsFrames=0;fpsTime=0}
- player.coyote=player.onGround?COYOTE:Math.max(0,player.coyote-dt);player.buffer=Math.max(0,player.buffer-dt);if(player.buffer>0&&player.coyote>0)jump();player.vy+=(player.hold&&player.vy<0?GRAVITY*.70:GRAVITY)*dt;player.y+=player.vy*dt;
+ player.coyote=player.onGround?COYOTE:Math.max(0,player.coyote-dt);player.buffer=Math.max(0,player.buffer-dt);if(player.buffer>0&&player.coyote>0)jump();const grav=isMobile()?GRAVITY_MOBILE:GRAVITY_DESKTOP;player.vy+=(player.hold&&player.vy<0?grav*.66:grav)*dt;player.y+=player.vy*dt;
  if(player.y>=ground-player.h){const air=!player.onGround;player.y=ground-player.h;player.vy=0;player.onGround=true;if(air)player.landing=.11;if(air&&player.buffer>0)jump()}else player.onGround=false;
- spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){spawnT=0;spawnPattern();nextSpawn=Math.max(isMobile()?1.18:.86,(isMobile()?1.72:1.42)-difficulty*.48)+Math.random()*(isMobile()?.46:.34)}if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
+ spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){spawnT=0;spawnPattern();nextSpawn=Math.max(isMobile()?1.42:.92,(isMobile()?2.02:1.48)-difficulty*.46)+Math.random()*(isMobile()?.54:.38)}if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
  obstacles.forEach(e=>e.x-=speed*dt);obstacles=obstacles.filter(e=>e.x+e.w>-180);for(const e of obstacles){if(hit(player,e,e.d.hit)){gameOver();draw();return}}
  for(const p of pickups){if(p.state==='world'){p.x-=speed*dt;if(hit(player,p,.56))collect(p)}else if(p.state==='fly'){p.t=Math.min(1,p.t+dt/.43);const q=1-Math.pow(1-p.t,3),arc=-76*Math.sin(Math.PI*p.t);p.x=p.sx+(p.tx-p.sx)*q;p.y=p.sy+(p.ty-p.sy)*q+arc;p.scale=1-.53*q;if(p.t>=1)arrive(p)}}
  pickups=pickups.filter(p=>p.state!=='done'&&p.x+p.w>-130);
  score+=(targetScore-score)*Math.min(1,dt*10.5);if(Math.abs(targetScore-score)<.02)score=targetScore;document.getElementById('score').textContent=Math.floor(score);
  if(score>app.best){app.best=score;document.getElementById('best').textContent=Math.floor(app.best)}
+ if(score>105&&score<180)ceilingWarn.classList.add('show');else ceilingWarn.classList.remove('show');
  const m=Math.floor(score/500)*500;if(m>=500&&m>lastM){lastM=m;startMapChange()}
  if(mapChanging){mapMix=Math.min(1,mapMix+dt/2.45);if(mapMix>=1){mapIndex=nextMap;mapBase=score;mapChanging=false;mapMix=0;mapToast()}}
  updateFX(dt);draw();requestAnimationFrame(loop)
@@ -314,14 +446,27 @@ function draw(){
  ctx.clearRect(0,0,W,H);drawBg(img(MAPS[mapIndex].src),mapProgress(),1);if(mapChanging)drawBg(img(MAPS[nextMap].src),0,mapMix);
  ctx.fillStyle='rgba(10,7,12,.045)';ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(13,8,15,.16)';ctx.fillRect(0,ground,W,H-ground);ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(0,ground,W,2);
  for(const p of particles){ctx.save();ctx.globalAlpha=Math.max(0,Math.min(1,p.life));if(p.type==='petals'){ctx.fillStyle='#ffc5da';ctx.beginPath();ctx.ellipse(p.x,p.y,p.s*1.5,p.s,.5,0,Math.PI*2);ctx.fill()}else if(p.type==='bubbles'){ctx.strokeStyle='rgba(255,235,250,.75)';ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(p.x,p.y,p.s*1.3,0,Math.PI*2);ctx.stroke()}else if(p.type==='fireflies'){ctx.fillStyle='#ffe98f';ctx.shadowBlur=12;ctx.shadowColor='#ffe06e';ctx.beginPath();ctx.arc(p.x,p.y,p.s*.65,0,Math.PI*2);ctx.fill()}else{ctx.fillStyle=p.color||'rgba(255,255,255,.75)';ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill()}ctx.restore()}
- for(const e of obstacles){drawContain(img(e.d.src),e.x,e.y,e.w,e.h);ctx.save();ctx.globalAlpha=.17;ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(e.x+e.w*.5,ground+5,e.w*.30,6,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+ for(const e of obstacles){
+ if(e.kind==='ceiling'){
+   const sway=Math.sin(elapsed*2.0+e.phase)*2.2;
+   ctx.save();
+   ctx.strokeStyle='rgba(104,66,47,.72)';ctx.lineWidth=2.4;
+   ctx.beginPath();ctx.moveTo(e.x+e.w*.5,0);ctx.lineTo(e.x+e.w*.5,e.y+sway+8);ctx.stroke();
+   ctx.restore();
+   drawContain(img(e.d.src),e.x,e.y+sway,e.w,e.h)
+ }else{
+   drawContain(img(e.d.src),e.x,e.y,e.w,e.h);
+   ctx.save();ctx.globalAlpha=.17;ctx.fillStyle='#000';ctx.beginPath();
+   ctx.ellipse(e.x+e.w*.5,ground+5,e.w*.30,6,0,0,Math.PI*2);ctx.fill();ctx.restore()
+ }
+}
  for(const p of pickups){const s=p.scale||1,w=p.w*s,h=p.h*s;drawContain(img(p.d.src),p.x+(p.w-w)/2,p.y+(p.h-h)/2,w,h)}
  drawPlayer();
  for(const f of texts){ctx.save();ctx.globalAlpha=Math.min(1,f.life*2.2);ctx.fillStyle=f.color;ctx.font='900 18px Inter,system-ui,sans-serif';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=8;ctx.fillText(f.text,f.x,f.y);ctx.restore()}
 }
-function goChars(){running=false;paused=false;intro.active=false;introSkip.classList.remove('show');gameScreen.classList.remove('game-active');document.body.classList.remove('game-active');document.documentElement.classList.remove('game-active');gameScreen.classList.add('hidden');select.classList.remove('hidden');try{if(document.fullscreenElement)document.exitFullscreen?.()}catch(e){}renderChars()}
+function goChars(){running=false;paused=false;clearTimeout(birthdayTimer);birthdayIntro.classList.add('hidden');birthdayIntro.classList.remove('fade');ceilingWarn.classList.remove('show');gameScreen.classList.remove('game-active');document.body.classList.remove('game-active');document.documentElement.classList.remove('game-active');gameScreen.classList.add('hidden');select.classList.remove('hidden');try{if(document.fullscreenElement)document.exitFullscreen?.()}catch(e){}renderChars()}
 document.getElementById('start').onclick=()=>{tryFullscreen();startGame()};
-document.getElementById('again').onclick=()=>{document.getElementById('gameOver').classList.add('hidden');resize();reset();startGameplay(isMobile()?2.65:2.15)};
+document.getElementById('again').onclick=()=>{document.getElementById('gameOver').classList.add('hidden');resize();reset();startGameplay(isMobile()?3.10:2.35)};
 document.getElementById('pause').onclick=()=>{if(!running)return;paused=true;document.getElementById('pauseOverlay').classList.remove('hidden')};
 document.getElementById('resume').onclick=()=>{document.getElementById('pauseOverlay').classList.add('hidden');paused=false;last=performance.now()};
 document.getElementById('characters').onclick=goChars;document.getElementById('characters2').onclick=goChars;document.getElementById('back').onclick=goChars;
