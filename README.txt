@@ -1,19 +1,21 @@
-Kicia & Rufi Runner V4
+Kicia & Rufi Runner V5
 
-Zmiany:
-- nowe arkusze ruchu AI dla wszystkich 6 postaci
-- każda klatka została znormalizowana do identycznego rozmiaru i tej samej linii ziemi
-- brak crossfade między klatkami = brak przebłysków
-- domyślnie 8 FPS postaci, regulacja 5–24 FPS
-- 8 klatek chodu + osobna klatka skoku i lądowania
-- nowe, duże przeszkody z osobnych plików, bez uciętych krawędzi
-- przeszkody mają cień i stoją na tej samej linii ziemi
-- nowe bonusy
-- bonus po dotknięciu leci do licznika wyniku przez 0.34 s
-- punkty są płynnie doliczane zamiast nagle przeskakiwać
-- animowany napis np. „gwiazdka +30”
-- animacja licznika i komunikat co 500 punktów
-- 7 płynnie zmieniających się map
+Najważniejsze poprawki:
+- nowe arkusze AI postaci
+- ZERO indywidualnego docinania klatek animacji
+- wszystkie klatki jednej postaci używają dokładnie tego samego prostokąta źródłowego
+- wszystkie klatki mają identyczną skalę, pozycję X i linię ziemi
+- duży przezroczysty margines bezpieczeństwa wokół postaci
+- brak crossfade'u między klatkami
+- domyślne 7 FPS postaci, regulacja 5–18 FPS
+- 8 klatek chodu / biegu
+- stabilna klatka skoku i lądowania
+- nowe większe przeszkody
+- płynne zbieranie bonusów: przedmiot leci do licznika po łuku
+- punkty są doliczane stopniowo, bez nagłego skoku
+- animowany napis za zebraną nagrodę
+- nowa kraina co 500 punktów z płynnym crossfade'em
+- 7 różnych teł
 - telefon: dotyk
-- komputer: klik/spacja
-- wszystkie pliki są płasko obok index.html — bez folderu assets
+- komputer: klik / spacja
+- wszystko jest płasko obok index.html, bez folderu assets
