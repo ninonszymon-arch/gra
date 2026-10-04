@@ -1,33 +1,25 @@
-Kicia & Rufi Runner V10 — BEST REBUILD
+Kicia & Rufi Runner V11 — ALL NEW SPRITES
 
-Najważniejsza zmiana:
-Nie odtwarzam już wszystkich 16 wygenerowanych póz po kolei.
-To właśnie powodowało efekt „odwijania / odpychania”.
-Każda postać ma teraz krótki, spójny cykl łap:
-0 → 1 → 2 → 3 → 2 → 1
-przy stałych 7 FPS.
+POPRAWKA:
+- usunięte stare sprite sheety wszystkich postaci
+- wstawione najnowsze wygenerowane animacje
+- Ona + Rufi używa teraz NAJNOWSZEGO pliku z dziewczyną na psie
+  (tego wygenerowanego po poprawce: „łapki mają chodzić góra-dół”)
+- Rufi również używa najnowszej poprawionej animacji przednich łap
 
-Skok:
-- niski i krótki, w stylu Chrome Dino
-- jedna poza przy wznoszeniu
-- jedna poza przy opadaniu
-- bez przewijania klatek biegu w powietrzu
-- wysokość teoretyczna ok. 94px
-- czas w powietrzu ok. 0.58s
-- mobilne przeszkody dolne są mniejsze, żeby ten niski skok faktycznie je czyścił
-- krótka tolerancja przy starcie skoku, żeby tap nie kończył się natychmiastową śmiercią
+Nowe pliki mają nazwy *_v11_sheet.png oraz *_v11_preview.png,
+więc GitHub / telefon nie powinien wczytać starego obrazka z cache.
 
-Telefon:
-- jeden system pointer events zamiast mieszania touch + pointer
-- tap = skok od razu
-- przyciski nadal są wyłączone z obsługi skoku
-- pion i poziom mają osobne dopasowanie wysokości planszy
+Siatki:
+- koty: 4x4 = 16 klatek
+- Rufi: 4x3 = 12 klatek
+- Ona + Rufi: 4x5 = 20 klatek
 
-Pozostało bez zmian:
-- stare mapy
-- urodzinowe tło dla „Ona + Rufi”
-- górne i dolne przeszkody
-- osadzenie dolnych przeszkód w ziemi
-- wszystkie sprite sheety
+Każda klatka została:
+- oczyszczona z artefaktów tła
+- wyrównana do jednej linii podłoża
+- przeskalowana identycznie w obrębie jednej postaci
+żeby postać nie skakała rozmiarem między klatkami.
 
-Walidacja JavaScript: OK
+Mechanika skoku z V10.2 zostaje.
+JavaScript: OK
