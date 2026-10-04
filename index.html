@@ -63,6 +63,29 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
   .top{grid-template-columns:1fr auto auto;padding:8px}.top .counter:nth-of-type(2){display:none}.title span{display:none}.counter{min-width:65px;padding:6px}
   .stage{height:62svh;min-height:430px}#canvas{height:100%;aspect-ratio:auto;max-height:none}.dots{display:none}.hint{font-size:.7rem}
 }
+
+.fpsSettings{
+  margin:0 16px 15px;padding:14px 15px;border-radius:20px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09)
+}
+.fpsSettingsTop{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}
+.fpsSettingsTop b{font-size:.95rem}.fpsSettingsTop span{font-size:.8rem;color:#c7b7c1}
+.fpsRow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.fpsSlider{width:100%;accent-color:var(--pink)}
+.fpsValue{
+  min-width:72px;text-align:center;padding:8px 10px;border-radius:13px;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);font-weight:800
+}
+.fpsGuide{margin-top:8px;font-size:.75rem;color:#b9a8b3;line-height:1.5}
+.fpsPresetRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.fpsPreset{
+  border:1px solid var(--line);background:rgba(255,255,255,.055);color:#fff;
+  border-radius:999px;padding:7px 10px;font-size:.75rem;cursor:pointer
+}
+.fpsPreset.active{background:rgba(255,110,163,.19);border-color:rgba(255,110,163,.55)}
+.pauseFps{margin:12px 0 15px;padding:11px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid var(--line);text-align:left}
+.pauseFps label{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;margin-bottom:7px}
+
 </style>
 </head>
 <body>
@@ -71,9 +94,34 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
     <div class="head">
       <div class="tag"><i></i> wybierz postać</div>
       <h1>Kicia & <em>Rufi</em> Runner</h1>
-      <p>Wybierz postać i graj. Teraz animacja bierze klatki bezpośrednio z nowych arkuszy AI — bez przycinania i bez przebłysków między obrazkami.</p>
+      <p>Wybierz postać i graj. Teraz animacja bierze klatki bezpośrednio z nowych arkuszy AI — bez przycinania i bez przebłysków między obrazkami. Tempo animacji możesz ustawić sam od 5 do 30 FPS.</p>
     </div>
     <div id="grid" class="grid"></div>
+
+    <div class="fpsSettings">
+      <div class="fpsSettingsTop">
+        <b>FPS animacji postaci</b>
+        <span id="fpsFeeling">Naturalny rytm</span>
+      </div>
+      <div class="fpsRow">
+        <input id="animFpsSlider" class="fpsSlider" type="range" min="5" max="30" step="1" value="10">
+        <div id="animFpsValue" class="fpsValue">10 FPS</div>
+      </div>
+      <div class="fpsPresetRow" id="fpsPresets">
+        <button class="fpsPreset" data-fps="6">6</button>
+        <button class="fpsPreset" data-fps="8">8</button>
+        <button class="fpsPreset" data-fps="10">10</button>
+        <button class="fpsPreset" data-fps="12">12</button>
+        <button class="fpsPreset" data-fps="15">15</button>
+        <button class="fpsPreset" data-fps="20">20</button>
+        <button class="fpsPreset" data-fps="30">30</button>
+      </div>
+      <div class="fpsGuide">
+        Polecane: <b>8–12 FPS</b>. 6–8 = spokojniej, 10 = najbardziej naturalnie,
+        12–15 = płynniej, 20–30 = bardzo szybko.
+      </div>
+    </div>
+
     <div class="foot">
       <div class="choice"><b id="choiceName"></b><span id="choiceDesc"></span></div>
       <div class="actions"><button id="random" class="btn ghost">Losuj</button><button id="start" class="btn primary">Graj</button></div>
@@ -85,7 +133,7 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
 <div class="wrap">
   <div class="game">
     <div class="top">
-      <div class="title"><b id="gameName"></b><span>tap / klik / spacja = skok • 12 klatek AI • 30 FPS animacji</span></div>
+      <div class="title"><b id="gameName"></b><span>tap / klik / spacja = skok • 12 klatek AI • <span id="gameAnimFps">10 FPS</span> animacji</span></div>
       <div class="counter"><b id="score">0</b><small>punkty</small></div>
       <div class="counter"><b id="best">0</b><small>rekord</small></div>
       <button id="pause" class="square">Ⅱ</button>
@@ -94,9 +142,16 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
       <canvas id="canvas"></canvas>
       <div id="hint" class="hint">Dotknij / kliknij = skok</div>
       <div id="mapName" class="mapName"></div>
-      <div id="fps" class="fps">FPS: -- • anim: 30</div>
+      <div id="fps" class="fps">FPS: -- • anim: 10</div>
 
-      <div id="pauseOverlay" class="overlay hidden"><div class="over"><h2>Pauza</h2><p>Postać poczeka.</p><button id="resume" class="btn primary">Wracam</button> <button id="characters" class="btn ghost">Postacie</button></div></div>
+      <div id="pauseOverlay" class="overlay hidden"><div class="over">
+<h2>Pauza</h2><p>Postać poczeka.</p>
+<div class="pauseFps">
+  <label><span>Tempo animacji</span><b id="pauseFpsValue">10 FPS</b></label>
+  <input id="pauseFpsSlider" class="fpsSlider" type="range" min="5" max="30" step="1" value="10">
+</div>
+<button id="resume" class="btn primary">Wracam</button> <button id="characters" class="btn ghost">Postacie</button>
+</div></div>
       <div id="gameOver" class="overlay hidden"><div class="over"><h2>Ups 😭</h2><p>Wpadłeś na przeszkodę.</p><div class="stats"><div class="stat"><b id="finalScore">0</b><span>wynik</span></div><div class="stat"><b id="finalBest">0</b><span>rekord</span></div></div><button id="again" class="btn primary">Jeszcze raz</button> <button id="characters2" class="btn ghost">Postacie</button></div></div>
     </div>
     <div class="bottom">
@@ -130,9 +185,41 @@ const ITEMS = [
 ];
 
 const STORAGE='kicia_rufi_runner_v3';
-let state={character:'pink',best:0};
+let state={character:'pink',best:0,animFps:10};
 try{Object.assign(state,JSON.parse(localStorage.getItem(STORAGE)||'{}'))}catch(e){}
+state.animFps=Math.max(5,Math.min(30,Number(state.animFps)||10));
 const save=()=>localStorage.setItem(STORAGE,JSON.stringify(state));
+
+const fpsSlider=document.getElementById('animFpsSlider');
+const fpsValue=document.getElementById('animFpsValue');
+const fpsFeeling=document.getElementById('fpsFeeling');
+const pauseFpsSlider=document.getElementById('pauseFpsSlider');
+const pauseFpsValue=document.getElementById('pauseFpsValue');
+
+function fpsFeelingText(v){
+  if(v<=6)return 'Bardzo spokojnie';
+  if(v<=8)return 'Spokojny rytm';
+  if(v<=11)return 'Naturalny rytm';
+  if(v<=15)return 'Płynniej';
+  if(v<=20)return 'Szybko';
+  return 'Bardzo szybko';
+}
+function applyAnimFps(v){
+  state.animFps=Math.max(5,Math.min(30,Number(v)||10));
+  fpsSlider.value=state.animFps;
+  pauseFpsSlider.value=state.animFps;
+  fpsValue.textContent=state.animFps+' FPS';
+  pauseFpsValue.textContent=state.animFps+' FPS';
+  fpsFeeling.textContent=fpsFeelingText(state.animFps);
+  const gameLabel=document.getElementById('gameAnimFps');
+  if(gameLabel)gameLabel.textContent=state.animFps+' FPS';
+  document.querySelectorAll('.fpsPreset').forEach(b=>b.classList.toggle('active',Number(b.dataset.fps)===state.animFps));
+  save();
+}
+fpsSlider.addEventListener('input',e=>applyAnimFps(e.target.value));
+pauseFpsSlider.addEventListener('input',e=>applyAnimFps(e.target.value));
+document.querySelectorAll('.fpsPreset').forEach(b=>b.addEventListener('click',()=>applyAnimFps(b.dataset.fps)));
+
 
 const imgs=new Map();
 function img(src){if(!imgs.has(src)){const x=new Image();x.src=src;imgs.set(src,x)}return imgs.get(src)}
@@ -167,6 +254,7 @@ function renderCharacters(){
 }
 function updateChoice(){document.getElementById('choiceName').textContent=selected.name;document.getElementById('choiceDesc').textContent=selected.desc}
 renderCharacters();
+applyAnimFps(state.animFps);
 document.getElementById('random').onclick=()=>{selected=CHARACTERS[Math.floor(Math.random()*CHARACTERS.length)];state.character=selected.id;save();renderCharacters()};
 
 const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('stage');
@@ -256,7 +344,7 @@ function loop(t){
   const W=canvas.getBoundingClientRect().width,H=canvas.getBoundingClientRect().height;
   elapsed+=dt;score+=dt*10;speed=335+Math.min(260,elapsed*3.1);player.anim+=dt;
 
-  fpsCount++;fpsTime+=dt;if(fpsTime>=.5){fpsNow=Math.round(fpsCount/fpsTime);fpsCount=0;fpsTime=0;document.getElementById('fps').textContent='FPS: '+fpsNow+' • anim: 30'}
+  fpsCount++;fpsTime+=dt;if(fpsTime>=.5){fpsNow=Math.round(fpsCount/fpsTime);fpsCount=0;fpsTime=0;document.getElementById('fps').textContent='FPS: '+fpsNow+' • anim: '+state.animFps}
 
   player.coyote=player.onGround?COYOTE:Math.max(0,player.coyote-dt);player.jumpBuffer=Math.max(0,player.jumpBuffer-dt);
   if(player.jumpBuffer>0&&player.coyote>0)jump();
@@ -308,7 +396,7 @@ function drawPlayer(){
   if(!player.onGround){
     frame=player.vy<0?8:9;
   }else{
-    frame=Math.floor(player.anim*30)%12;
+    frame=Math.floor(player.anim*state.animFps)%12;
   }
   const bob=player.onGround?Math.sin(player.anim*18)*1.8:0;
   ctx.save();ctx.translate(player.x+player.w/2,player.y+player.h/2+bob);

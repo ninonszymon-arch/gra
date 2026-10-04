@@ -1,18 +1,14 @@
-Kicia & Rufi Runner v3
+Kicia & Rufi Runner v3 — FPS CONTROL
 
-Najważniejsze:
-- nowe 12-klatkowe arkusze AI dla każdej postaci
-- klatki są czytane bezpośrednio z jednego arkusza, więc nic nie jest przycinane między plikami
-- brak crossfade między klatkami = brak przebłysków
-- animacja postaci: 30 FPS, render gry zależny od odświeżania ekranu
-- 7 różnych map
-- mapa zmienia się co około 500 punktów i płynnie przenika przez 2.2 s
-- tło nie zapętla się skokiem: kamera płynnie przesuwa się po szerokiej panoramie
-- 20 przeszkód i 4 bonusy z jednego arkusza
-- trudność i układy przeszkód rosną wraz z czasem
-- telefon: dotyk
-- komputer: klik / spacja
-- wybrana postać i rekord zapisują się lokalnie
+Nowe:
+- możesz sam ustawić FPS animacji postaci od 5 do 30
+- ustawienie zapisuje się na telefonie / komputerze
+- można zmienić FPS przed grą albo podczas pauzy
+- szybkie presety: 6, 8, 10, 12, 15, 20, 30 FPS
+- polecany zakres: 8–12 FPS
+- 10 FPS = domyślny, najbardziej naturalny rytm
 
-GitHub:
-Wszystkie pliki są płasko obok index.html. Nie ma folderu assets.
+Ważne:
+- to jest FPS animacji postaci, nie FPS całej gry
+- tło i fizyka nadal działają płynnie niezależnie od tempa klatek postaci
+- pliki są płasko obok index.html, bez folderu assets
