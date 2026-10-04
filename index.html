@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#140a19">
-<title>Kicia & Rufi Runner V7</title>
+<title>Kicia & Rufi Runner V8.3</title>
 <style>
 :root{
  --bg:#0b0710;--panel:#1b1121;--line:rgba(255,255,255,.11);
@@ -64,17 +64,26 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
  .wrap{width:calc(100% - 4px)}#gameScreen{align-items:flex-start;padding-top:3px}.game{border-radius:20px}.top{grid-template-columns:1fr auto auto;padding:8px}.top .counter:nth-of-type(2){display:none}.title span{display:none}.counter{min-width:64px;padding:6px}.stage{height:62svh;min-height:430px}#canvas{height:100%;aspect-ratio:auto;max-height:none}.dots{display:none}.hint{font-size:.69rem}
 }
 
-/* ===== V8.1: specjalna scenka tylko dla „Ona + Rufi” ===== */
-#cutsceneScreen{position:fixed;inset:0;z-index:5000;background:#09060d;display:grid;place-items:center;overflow:hidden}
-#cutsceneScreen.hidden{display:none!important}.cutsceneWrap{position:absolute;inset:0;overflow:hidden;background:#09060d}
-#cutsceneCanvas{display:block;width:100%;height:100%;touch-action:none}.cutsceneShade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.14),transparent 28%,transparent 68%,rgba(0,0,0,.24))}
-.cutsceneSkip{position:absolute;z-index:5;right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));border:1px solid rgba(255,255,255,.34);background:rgba(19,10,22,.60);backdrop-filter:blur(12px);color:#fff;padding:11px 17px;border-radius:999px;font-weight:900;cursor:pointer;box-shadow:0 9px 30px rgba(0,0,0,.25)}
-.cutsceneBubble{position:absolute;z-index:5;max-width:440px;padding:14px 20px;color:#351421;background:rgba(255,249,246,.97);border:2px solid rgba(255,143,181,.94);border-radius:24px;font-size:clamp(1rem,3.6vw,1.5rem);font-weight:950;line-height:1.25;box-shadow:0 18px 46px rgba(0,0,0,.27);opacity:0;transform:translateY(12px) scale(.94);transition:opacity .25s ease,transform .32s cubic-bezier(.2,.8,.2,1)}
-.cutsceneBubble.show{opacity:1;transform:translateY(0) scale(1)}
-.cutsceneBubble::after{content:"";position:absolute;left:40px;bottom:-15px;width:24px;height:24px;background:inherit;border-right:2px solid rgba(255,143,181,.94);border-bottom:2px solid rgba(255,143,181,.94);transform:rotate(45deg)}
-.cutsceneProgress{position:absolute;z-index:5;left:50%;bottom:max(13px,env(safe-area-inset-bottom));width:min(420px,52vw);height:4px;transform:translateX(-50%);border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}.cutsceneProgress i{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff65a0,#ffd4e2)}
-#transitionFlash{position:fixed;inset:0;z-index:9999;background:#fff;opacity:0;pointer-events:none;transition:opacity .42s ease}#transitionFlash.on{opacity:1}
-@media(max-width:760px){.cutsceneSkip{padding:10px 15px}.cutsceneBubble{font-size:1rem;padding:12px 15px;max-width:70vw}.cutsceneProgress{width:45vw}}
+/* ===== V8.3 PHONE + IN-GAME SCENE ===== */
+html.game-active,body.game-active{overflow:hidden!important;overscroll-behavior:none!important;height:100%;}
+body.game-active{position:fixed;inset:0;width:100%;}
+body.game-active *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;}
+#gameScreen.game-active,#gameScreen.game-active .stage,#gameScreen.game-active canvas{touch-action:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;}
+.introSkip{position:absolute;z-index:20;top:12px;right:12px;border:1px solid rgba(255,255,255,.28);background:rgba(10,7,13,.58);color:#fff;border-radius:999px;padding:10px 15px;font-weight:850;backdrop-filter:blur(9px);opacity:0;pointer-events:none;transition:.18s;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.introSkip.show{opacity:1;pointer-events:auto}
+.introVeil{position:absolute;z-index:7;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 55%,transparent 30%,rgba(12,6,15,.12) 100%);opacity:0;transition:.3s}.introVeil.show{opacity:1}
+@media(max-width:760px){
+ html,body{height:100%;}
+ #gameScreen{padding:0!important;min-height:100dvh!important;height:100dvh!important;align-items:stretch!important;}
+ #gameScreen .wrap{width:100%!important;height:100%!important;margin:0!important;}
+ #gameScreen .game{width:100%!important;height:100%!important;min-height:100dvh!important;border-radius:0!important;border:0!important;display:flex!important;flex-direction:column!important;}
+ #gameScreen .top{flex:0 0 auto;padding-top:max(8px,env(safe-area-inset-top))!important;}
+ #gameScreen .stage{flex:1 1 auto!important;height:auto!important;min-height:0!important;}
+ #gameScreen #canvas{height:100%!important;width:100%!important;max-height:none!important;aspect-ratio:auto!important;}
+ #gameScreen .bottom{flex:0 0 auto;padding-bottom:max(8px,env(safe-area-inset-bottom))!important;}
+ .introSkip{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));}
+ .hint{bottom:18px!important;}
+}
 
 </style>
 </head>
@@ -84,7 +93,7 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
  <div class="head">
   <div class="tag"><i></i> wybierz postać</div>
   <h1>Kicia & <em>Rufi</em> Runner</h1>
-  <p>V7 używa osobnych pełnych plików PNG dla każdej klatki. Nie ma już atlasu, dzielenia obrazka ani docinania sprite'ów podczas gry.</p>
+  <p>V8.3 — poprawiona wersja na telefon + specjalna scenka w samej grze dla „Ona + Rufi”.</p>
   <div class="loader"><i id="loadbar"></i></div><div id="loadtxt" class="loadtxt">Ładowanie grafik...</div>
  </div>
  <div id="grid" class="grid"></div>
@@ -96,17 +105,6 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
  <div class="foot"><div class="choice"><b id="choiceName"></b><span id="choiceDesc"></span></div><div class="actions"><button id="random" class="btn ghost">Losuj</button><button id="start" class="btn primary" disabled>Graj</button></div></div>
 </div>
 </section>
-
-
-<section id="cutsceneScreen" class="hidden" aria-label="Scenka urodzinowa">
- <div class="cutsceneWrap">
-  <canvas id="cutsceneCanvas"></canvas><div class="cutsceneShade"></div>
-  <button id="cutsceneSkip" class="cutsceneSkip">Pomiń ›</button>
-  <div id="cutsceneBubble" class="cutsceneBubble"></div>
-  <div class="cutsceneProgress"><i id="cutsceneProgressBar"></i></div>
- </div>
-</section>
-<div id="transitionFlash"></div>
 
 <section id="gameScreen" class="screen hidden">
 <div class="wrap"><div class="game">
@@ -121,6 +119,8 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
   <div id="hint" class="hint">Dotknij / kliknij = skok</div>
   <div id="mapName" class="mapName"></div>
   <div id="fps" class="fps">FPS: --</div>
+  <button id="introSkip" class="introSkip">Pomiń ›</button>
+  <div id="introVeil" class="introVeil"></div>
   <div id="milestone" class="milestone">Nagroda!</div>
   <div id="pauseOverlay" class="overlay hidden"><div class="over"><h2>Pauza</h2><p>Możesz wrócić albo zmienić postać.</p><button id="resume" class="btn primary">Wracam</button> <button id="characters" class="btn ghost">Postacie</button></div></div>
   <div id="gameOver" class="overlay hidden"><div class="over"><h2>Ups 😭</h2><p>Wpadłeś na przeszkodę.</p><div class="stats"><div class="stat"><b id="finalScore">0</b><span>wynik</span></div><div class="stat"><b id="finalBest">0</b><span>rekord</span></div></div><button id="again" class="btn primary">Jeszcze raz</button> <button id="characters2" class="btn ghost">Postacie</button></div></div>
@@ -138,8 +138,8 @@ app.animFps=Math.max(5,Math.min(14,Number(app.animFps)||7));
 const save=()=>localStorage.setItem(STORE,JSON.stringify(app));
 
 const images=new Map();
-const CUTSCENE_FRAMES=['cutscene_0.webp','cutscene_1.webp','cutscene_2.webp','cutscene_3.webp','cutscene_4.webp','cutscene_5.webp','cutscene_6.webp'];
-const allSources=[...CHARS.flatMap(c=>c.frames),...MAPS.map(m=>m.src),...OBSTACLES.map(o=>o.src),...COLLECTIBLES.map(c=>c.src),...CUTSCENE_FRAMES];
+const INTRO_ASSETS=['intro_boy_walk0.webp','intro_boy_walk1.webp','intro_gift.webp','intro_birthday.webp','intro_love.webp','intro_kiss.webp','intro_farewell.webp','intro_boy_leave.webp','intro_girl_rufi_flowers.webp'];
+const allSources=[...CHARS.flatMap(c=>c.frames),...MAPS.map(m=>m.src),...OBSTACLES.map(o=>o.src),...COLLECTIBLES.map(c=>c.src),...INTRO_ASSETS];
 let loaded=0;
 function loadImage(src){
  if(images.has(src)) return Promise.resolve(images.get(src));
@@ -188,7 +188,7 @@ const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),stage
 let W=960,H=540,running=false,paused=false,last=0,elapsed=0,score=0,targetScore=0,speed=325,ground=420;
 let player={x:110,y:0,w:138,h:111,vy:0,onGround:true,coyote:0,buffer:0,hold:false,anim:0,landing:0};
 let obstacles=[],pickups=[],particles=[],texts=[],spawnT=0,nextSpawn=1.4,pickT=0,nextPick=2.7,mapIndex=0,nextMap=1,mapBase=0,mapMix=0,mapChanging=false,fpsFrames=0,fpsTime=0,lastM=0;
-const GRAVITY=1870,JUMP=-720,COYOTE=.11,BUFFER=.13,MAP_STEP=500;
+const GRAVITY=1840,JUMP=-715,COYOTE=.16,BUFFER=.17,MAP_STEP=500;
 
 function img(src){return images.get(src)}
 function resize(){
@@ -202,16 +202,42 @@ function setHud(){
 }
 function mapToast(){const e=document.getElementById('mapName');e.textContent='Mapa: '+MAPS[mapIndex].name;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1350);setHud()}
 function milestone(text){const e=document.getElementById('milestone');e.textContent=text;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1250)}
-function startGameDirect(){select.classList.add('hidden');document.getElementById('cutsceneScreen').classList.add('hidden');gameScreen.classList.remove('hidden');document.getElementById('gameOver').classList.add('hidden');document.getElementById('pauseOverlay').classList.add('hidden');requestAnimationFrame(()=>{resize();reset();running=true;paused=false;last=performance.now();setHud();mapToast();requestAnimationFrame(loop)})}
+function tryFullscreen(){
+ if(!isMobile())return;const el=document.documentElement;try{const p=el.requestFullscreen?.();if(p?.catch)p.catch(()=>{})}catch(e){}
+}
+function startGameplay(grace=2.55){
+ intro.active=false;introSkip.classList.remove('show');introVeil.classList.remove('show');
+ running=true;paused=false;spawnT=0;nextSpawn=grace;pickT=0;nextPick=2.8;last=performance.now();requestAnimationFrame(loop)
+}
+function startGame(){
+ select.classList.add('hidden');gameScreen.classList.remove('hidden');gameScreen.classList.add('game-active');document.body.classList.add('game-active');document.documentElement.classList.add('game-active');
+ document.getElementById('gameOver').classList.add('hidden');document.getElementById('pauseOverlay').classList.add('hidden');
+ requestAnimationFrame(()=>{resize();reset();setHud();mapToast();if(selected.id==='girlRufi')startRomanticIntro();else startGameplay(isMobile()?2.65:2.15)})
+}
 function reset(){elapsed=0;score=0;targetScore=0;speed=325;obstacles=[];pickups=[];particles=[];texts=[];spawnT=0;nextSpawn=1.38;pickT=0;nextPick=2.7;mapIndex=0;nextMap=1;mapBase=0;mapMix=0;mapChanging=false;lastM=0;player.vy=0;player.onGround=true;player.coyote=COYOTE;player.buffer=0;player.hold=false;player.anim=0;player.landing=0;player.y=ground-player.h;document.getElementById('score').textContent='0';document.getElementById('hint').style.opacity='1'}
 function askJump(){if(!running||paused)return;player.buffer=BUFFER;player.hold=true;document.getElementById('hint').style.opacity='0'}
 function releaseJump(){player.hold=false;if(player.vy<-245)player.vy*=.73}
-stage.addEventListener('pointerdown',e=>{e.preventDefault();askJump()});stage.addEventListener('pointerup',releaseJump);stage.addEventListener('pointercancel',releaseJump);addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='ArrowUp')&&running){e.preventDefault();askJump()}});addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='ArrowUp')releaseJump()});
+function isMobile(){return matchMedia('(pointer:coarse)').matches||innerWidth<=760}
+stage.addEventListener('pointerdown',e=>{if(e.target.closest&&e.target.closest('button'))return;e.preventDefault();askJump()},{passive:false});
+stage.addEventListener('pointerup',releaseJump,{passive:false});stage.addEventListener('pointercancel',releaseJump,{passive:false});addEventListener('pointerup',releaseJump,{passive:true});
+['contextmenu','selectstart','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{if(document.body.classList.contains('game-active'))e.preventDefault()},{passive:false}));
+document.addEventListener('touchmove',e=>{if(document.body.classList.contains('game-active'))e.preventDefault()},{passive:false});
+addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='ArrowUp')&&running){e.preventDefault();askJump()}});addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='ArrowUp')releaseJump()});
 function jump(){player.vy=JUMP;player.onGround=false;player.coyote=0;player.buffer=0;for(let i=0;i<7;i++)particles.push({x:player.x+player.w*.43,y:ground-3,vx:-38-Math.random()*72,vy:-28-Math.random()*62,life:.5,s:2+Math.random()*3,type:'dust'})}
 function spawnObstacle(off=0,sc=1){const d=OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)],s=(.98+Math.random()*.12)*sc,w=d.w*s,h=d.h*s;obstacles.push({d,x:W+110+off,y:ground-h,w,h})}
-function spawnPattern(){const diff=Math.min(1,elapsed/90),r=Math.random();if(diff>.72&&r<.15){spawnObstacle(0,.92);spawnObstacle(235,.94)}else if(diff>.42&&r<.33){spawnObstacle(0,.94);spawnObstacle(190,.90)}else spawnObstacle(0,1)}
+function spawnPattern(){
+ const diff=Math.min(1,score/2600),r=Math.random();
+ if(score>1700&&r<.13){spawnObstacle(0,.91);spawnObstacle(isMobile()?210:245,.92)}
+ else if(score>900&&r<.22){spawnObstacle(0,.94);spawnObstacle(isMobile()?185:215,.90)}
+ else spawnObstacle(0,1)
+}
 function spawnPickup(){const d=COLLECTIBLES[Math.floor(Math.random()*COLLECTIBLES.length)],y=ground-d.h-(72+Math.random()*95);pickups.push({d,x:W+90,y,w:d.w,h:d.h,state:'world',t:0,scale:1})}
-function hit(a,o,ratio=.68){const ax=a.x+a.w*.27,ay=a.y+a.h*.18,aw=a.w*.48,ah=a.h*.68,ox=o.x+o.w*(1-ratio)/2,oy=o.y+o.h*(1-ratio)/2,ow=o.w*ratio,oh=o.h*ratio;return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy}
+function hit(a,o,ratio=.68){
+ const m=isMobile(),pw=m?.43:.48,ph=m?.62:.68,pr=m?.60:ratio;
+ const ax=a.x+a.w*(1-pw)/2,ay=a.y+a.h*(1-ph)*.58,aw=a.w*pw,ah=a.h*ph;
+ const ox=o.x+o.w*(1-pr)/2,oy=o.y+o.h*(1-pr),ow=o.w*pr,oh=o.h*pr;
+ return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy
+}
 function collect(p){
  p.state='fly';p.t=0;p.sx=p.x;p.sy=p.y;const sr=document.getElementById('scoreBox').getBoundingClientRect(),rr=stage.getBoundingClientRect();p.tx=sr.left-rr.left+sr.width*.5;p.ty=sr.top-rr.top+sr.height*.5;
  for(let i=0;i<11;i++)particles.push({x:p.x+p.w/2,y:p.y+p.h/2,vx:(Math.random()-.5)*150,vy:-45-Math.random()*115,life:.62,s:3+Math.random()*4,type:'spark',color:p.d.color});
@@ -221,13 +247,48 @@ function arrive(p){p.state='done';targetScore+=p.d.points;const b=document.getEl
 function gameOver(){running=false;app.best=Math.max(app.best,score);save();document.getElementById('finalScore').textContent=Math.floor(score);document.getElementById('finalBest').textContent=Math.floor(app.best);document.getElementById('gameOver').classList.remove('hidden');setHud()}
 function startMapChange(){if(mapChanging)return;nextMap=(mapIndex+1)%MAPS.length;mapChanging=true;mapMix=0;milestone('✦ Nagroda: '+MAPS[nextMap].name+' ✦')}
 function mapProgress(){return Math.max(0,Math.min(1,(score-mapBase)/MAP_STEP))}
+
+let intro={active:false,t:0,last:0};
+const introSkip=document.getElementById('introSkip'),introVeil=document.getElementById('introVeil');
+function ease(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
+function lerp(a,b,t){return a+(b-a)*t}
+function drawSpriteGround(src,cx,maxW,maxH,alpha=1,flip=false){
+ const im=img(src);if(!im)return;const r=Math.min(maxW/im.naturalWidth,maxH/im.naturalHeight),dw=im.naturalWidth*r,dh=im.naturalHeight*r,x=cx-dw/2,y=ground-dh;
+ ctx.save();ctx.globalAlpha=alpha;if(flip){ctx.translate(x+dw,y);ctx.scale(-1,1);ctx.drawImage(im,0,0,dw,dh)}else ctx.drawImage(im,x,y,dw,dh);ctx.restore();
+}
+function drawIntroBase(){
+ ctx.clearRect(0,0,W,H);drawBg(img(MAPS[0].src),0,1);ctx.fillStyle='rgba(10,7,12,.035)';ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(13,8,15,.10)';ctx.fillRect(0,ground,W,H-ground);ctx.fillStyle='rgba(255,255,255,.14)';ctx.fillRect(0,ground,W,2);
+}
+function drawIntroActualPlayer(alpha=1){const im=img(selected.frames[2]);if(im)drawContain(im,player.x,ground-player.h,player.w,player.h,alpha)}
+function fullSceneSize(){return {w:isMobile()?W*.98:Math.min(W*.74,760),h:H*.69}}
+function drawFullIntro(src,alpha=1){const s=fullSceneSize();drawSpriteGround(src,W*.50,s.w,s.h,alpha,false)}
+function startRomanticIntro(){running=false;paused=false;intro.active=true;intro.t=0;intro.last=performance.now();introSkip.classList.add('show');introVeil.classList.add('show');document.getElementById('hint').style.opacity='0';requestAnimationFrame(introLoop)}
+function finishRomanticIntro(){if(!intro.active)return;intro.active=false;introSkip.classList.remove('show');introVeil.classList.remove('show');document.getElementById('hint').style.opacity='1';startGameplay(isMobile()?2.75:2.25)}
+introSkip.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()},{passive:false});introSkip.onclick=finishRomanticIntro;
+function introLoop(now){
+ if(!intro.active)return;const dt=Math.min(.04,(now-intro.last)/1000||0);intro.last=now;intro.t+=dt;const t=intro.t;drawIntroBase();
+ if(t<.55){drawIntroActualPlayer(1)}
+ else if(t<2.15){drawIntroActualPlayer(1);const p=ease((t-.55)/1.60),bx=W+90-(W*.64)*p,frame=(Math.floor((t-.55)*5)%2?'intro_boy_walk1.webp':'intro_boy_walk0.webp');drawSpriteGround(frame,bx,isMobile()?W*.37:210,H*.43,1,false)}
+ else if(t<3.25){drawFullIntro('intro_gift.webp',1)}
+ else if(t<4.25){drawFullIntro('intro_birthday.webp',1)}
+ else if(t<5.25){drawFullIntro('intro_love.webp',1)}
+ else if(t<6.35){drawFullIntro('intro_kiss.webp',1)}
+ else if(t<7.10){drawFullIntro('intro_farewell.webp',1)}
+ else if(t<8.65){const p=ease((t-7.10)/1.55),girlX=player.x+player.w*.80,boyX=lerp(W*.38,-W*.22,p);drawSpriteGround('intro_girl_rufi_flowers.webp',girlX,isMobile()?W*.50:300,H*.52,1,false);drawSpriteGround('intro_boy_leave.webp',boyX,isMobile()?W*.34:200,H*.46,1,false)}
+ else if(t<9.05){const p=ease((t-8.65)/.40),girlX=player.x+player.w*.80;drawSpriteGround('intro_girl_rufi_flowers.webp',girlX,isMobile()?W*.50:300,H*.52,1-p,false);drawIntroActualPlayer(p)}
+ else {finishRomanticIntro();return}
+ requestAnimationFrame(introLoop)
+}
+
 function loop(t){
  if(!running)return;if(paused){last=t;requestAnimationFrame(loop);return}
- const dt=Math.min(.033,(t-last)/1000||0);last=t;elapsed+=dt;targetScore+=dt*10;speed=325+Math.min(250,elapsed*2.9);player.anim+=dt;player.landing=Math.max(0,player.landing-dt);
+ const dt=Math.min(.033,(t-last)/1000||0);last=t;elapsed+=dt;targetScore+=dt*10;
+ const difficulty=Math.min(1,score/3200),reaction=isMobile()?(2.70-1.08*difficulty):(2.28-.84*difficulty);
+ speed=Math.max(118,(W-player.x-player.w*.15)/reaction);player.anim+=dt;player.landing=Math.max(0,player.landing-dt);
  fpsFrames++;fpsTime+=dt;if(fpsTime>.5){document.getElementById('fps').textContent='FPS: '+Math.round(fpsFrames/fpsTime);fpsFrames=0;fpsTime=0}
  player.coyote=player.onGround?COYOTE:Math.max(0,player.coyote-dt);player.buffer=Math.max(0,player.buffer-dt);if(player.buffer>0&&player.coyote>0)jump();player.vy+=(player.hold&&player.vy<0?GRAVITY*.70:GRAVITY)*dt;player.y+=player.vy*dt;
  if(player.y>=ground-player.h){const air=!player.onGround;player.y=ground-player.h;player.vy=0;player.onGround=true;if(air)player.landing=.11;if(air&&player.buffer>0)jump()}else player.onGround=false;
- spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){spawnT=0;spawnPattern();nextSpawn=Math.max(.76,1.45-elapsed*.006)+Math.random()*.36}if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
+ spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){spawnT=0;spawnPattern();nextSpawn=Math.max(isMobile()?1.18:.86,(isMobile()?1.72:1.42)-difficulty*.48)+Math.random()*(isMobile()?.46:.34)}if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
  obstacles.forEach(e=>e.x-=speed*dt);obstacles=obstacles.filter(e=>e.x+e.w>-180);for(const e of obstacles){if(hit(player,e,e.d.hit)){gameOver();draw();return}}
  for(const p of pickups){if(p.state==='world'){p.x-=speed*dt;if(hit(player,p,.56))collect(p)}else if(p.state==='fly'){p.t=Math.min(1,p.t+dt/.43);const q=1-Math.pow(1-p.t,3),arc=-76*Math.sin(Math.PI*p.t);p.x=p.sx+(p.tx-p.sx)*q;p.y=p.sy+(p.ty-p.sy)*q+arc;p.scale=1-.53*q;if(p.t>=1)arrive(p)}}
  pickups=pickups.filter(p=>p.state!=='done'&&p.x+p.w>-130);
@@ -258,66 +319,9 @@ function draw(){
  drawPlayer();
  for(const f of texts){ctx.save();ctx.globalAlpha=Math.min(1,f.life*2.2);ctx.fillStyle=f.color;ctx.font='900 18px Inter,system-ui,sans-serif';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=8;ctx.fillText(f.text,f.x,f.y);ctx.restore()}
 }
-
-/* ===== V8.1 CUTSCENE =====
-   Tylko dla postaci „Ona + Rufi”.
-   Scenka kończy się przed normalną grą — po błysku uruchamia się dokładnie istniejący runner. */
-const cutsceneScreen=document.getElementById('cutsceneScreen');
-const cutsceneCanvas=document.getElementById('cutsceneCanvas');
-const cutCtx=cutsceneCanvas.getContext('2d');
-const cutBubble=document.getElementById('cutsceneBubble');
-const cutProgress=document.getElementById('cutsceneProgressBar');
-const transitionFlash=document.getElementById('transitionFlash');
-let cutsceneActive=false,cutsceneRAF=0,cutsceneStartedAt=0,cutRect={x:0,y:0,w:0,h:0};
-const CUT_DUR=[.82,.82,.82,.84,.94,.96,.82];
-const CUT_TOTAL=CUT_DUR.reduce((a,b)=>a+b,0);
-function cutResize(){const dpr=Math.min(devicePixelRatio||1,2);cutsceneCanvas.width=Math.round(innerWidth*dpr);cutsceneCanvas.height=Math.round(innerHeight*dpr);cutCtx.setTransform(dpr,0,0,dpr,0,0)}
-addEventListener('resize',()=>{if(cutsceneActive)cutResize()});
-function smoothstep(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
-function frameAt(sec){let a=0;for(let i=0;i<CUT_DUR.length;i++){if(sec<a+CUT_DUR[i])return{i,local:(sec-a)/CUT_DUR[i]};a+=CUT_DUR[i]}return{i:CUT_DUR.length-1,local:1}}
-function drawCinematic(image,alpha,zoom,panX){
- if(!image)return;const w=innerWidth,h=innerHeight,ir=image.naturalWidth/image.naturalHeight,cr=w/h;
- // soft fullscreen background
- let sw,sh,sx,sy;if(ir>cr){sh=image.naturalHeight;sw=sh*cr;sx=(image.naturalWidth-sw)*(.5+panX*.08);sy=0}else{sw=image.naturalWidth;sh=sw/cr;sx=0;sy=(image.naturalHeight-sh)/2}
- cutCtx.save();cutCtx.globalAlpha=alpha*.45;cutCtx.filter='blur(18px) brightness(.72)';cutCtx.drawImage(image,sx,sy,sw,sh,0,0,w,h);cutCtx.restore();
- // full uncropped panel on top so both characters stay visible on phone and PC
- const z=zoom,fit=Math.min(w/image.naturalWidth,h/image.naturalHeight)*z,dw=image.naturalWidth*fit,dh=image.naturalHeight*fit;
- const dx=(w-dw)/2 + panX*Math.max(0,(w-dw)*.12),dy=(h-dh)/2;
- cutRect={x:dx,y:dy,w:dw,h:dh};
- cutCtx.save();cutCtx.globalAlpha=alpha;cutCtx.drawImage(image,dx,dy,dw,dh);cutCtx.restore();
-}
-function positionBoyBubble(frame){
- // Boy is on the left side in the speaking frames. Anchor the bubble to HIS side.
- const left=Math.max(12,cutRect.x+cutRect.w*.055),top=Math.max(14,cutRect.y+cutRect.h*.055),maxW=Math.min(440,cutRect.w*.46);
- cutBubble.style.left=left+'px';cutBubble.style.top=top+'px';cutBubble.style.right='auto';cutBubble.style.bottom='auto';cutBubble.style.maxWidth=maxW+'px';
-}
-function updateBoyDialogue(frame,local){
- let text='';
- if(frame===4&&local>.16)text='Kocham Cię ❤️';
- if(frame>=5)text='Kocham Cię. Wszystkiego najlepszego, kicia ❤️';
- if(text){positionBoyBubble(frame);if(cutBubble.textContent!==text)cutBubble.textContent=text;cutBubble.classList.add('show')}else cutBubble.classList.remove('show');
-}
-function renderCutscene(now){
- if(!cutsceneActive)return;const sec=(now-cutsceneStartedAt)/1000;if(sec>=CUT_TOTAL){finishCutscene(false);return}
- const f=frameAt(sec),i=f.i,p=f.local;cutCtx.clearRect(0,0,innerWidth,innerHeight);
- const mix=smoothstep((p-.63)/.37),pan=(p-.5)*(i%2?1:-1),zoom=1.0+Math.sin(Math.PI*p)*.016;
- drawCinematic(img(CUTSCENE_FRAMES[i]),1-mix*.94,zoom,pan);
- if(i<CUTSCENE_FRAMES.length-1&&mix>0)drawCinematic(img(CUTSCENE_FRAMES[i+1]),mix,1.0+mix*.012,-pan*.35);
- updateBoyDialogue(i,p);cutProgress.style.width=Math.min(100,sec/CUT_TOTAL*100)+'%';cutsceneRAF=requestAnimationFrame(renderCutscene)
-}
-function startSpecialCutscene(){running=false;paused=false;select.classList.add('hidden');gameScreen.classList.add('hidden');cutsceneScreen.classList.remove('hidden');cutsceneActive=true;cutResize();cutBubble.classList.remove('show');cutProgress.style.width='0%';cutsceneStartedAt=performance.now();cancelAnimationFrame(cutsceneRAF);cutsceneRAF=requestAnimationFrame(renderCutscene)}
-function finishCutscene(skipped){
- if(!cutsceneActive)return;cutsceneActive=false;cancelAnimationFrame(cutsceneRAF);cutBubble.classList.remove('show');
- // White teleport flash. Behind it we start the EXISTING game with Ona + Rufi.
- transitionFlash.classList.add('on');
- setTimeout(()=>{cutsceneScreen.classList.add('hidden');startGameDirect();setTimeout(()=>transitionFlash.classList.remove('on'),120)},400)
-}
-function requestGameStart(){if(selected.id==='girlRufi')startSpecialCutscene();else startGameDirect()}
-document.getElementById('cutsceneSkip').onclick=()=>finishCutscene(true);
-
-function goChars(){running=false;paused=false;cutsceneActive=false;cancelAnimationFrame(cutsceneRAF);cutsceneScreen.classList.add('hidden');gameScreen.classList.add('hidden');select.classList.remove('hidden');renderChars()}
-document.getElementById('start').onclick=requestGameStart;
-document.getElementById('again').onclick=()=>{document.getElementById('gameOver').classList.add('hidden');resize();reset();running=true;last=performance.now();requestAnimationFrame(loop)};
+function goChars(){running=false;paused=false;intro.active=false;introSkip.classList.remove('show');gameScreen.classList.remove('game-active');document.body.classList.remove('game-active');document.documentElement.classList.remove('game-active');gameScreen.classList.add('hidden');select.classList.remove('hidden');try{if(document.fullscreenElement)document.exitFullscreen?.()}catch(e){}renderChars()}
+document.getElementById('start').onclick=()=>{tryFullscreen();startGame()};
+document.getElementById('again').onclick=()=>{document.getElementById('gameOver').classList.add('hidden');resize();reset();startGameplay(isMobile()?2.65:2.15)};
 document.getElementById('pause').onclick=()=>{if(!running)return;paused=true;document.getElementById('pauseOverlay').classList.remove('hidden')};
 document.getElementById('resume').onclick=()=>{document.getElementById('pauseOverlay').classList.add('hidden');paused=false;last=performance.now()};
 document.getElementById('characters').onclick=goChars;document.getElementById('characters2').onclick=goChars;document.getElementById('back').onclick=goChars;
