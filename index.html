@@ -69,30 +69,30 @@ body{background:radial-gradient(circle at 10% 0%,rgba(255,112,167,.16),transpare
 
 <script>
 const characters=[
- {id:'rufi',name:'Rufi',desc:'shih tzu • szybki i puchaty',frames:['assets/characters/rufi_1.png','assets/characters/rufi_2.png','assets/characters/rufi_3.png'],jump:'assets/characters/rufi_4.png',scale:1.00},
- {id:'girl_rufi',name:'Ona + Rufi',desc:'jedzie na Rufim',frames:['assets/characters/girl_rufi_0.png','assets/characters/girl_rufi_1.png','assets/characters/girl_rufi_2.png','assets/characters/girl_rufi_3.png'],jump:'assets/characters/girl_rufi_4.png',scale:1.22},
- {id:'pink',name:'Kicia różowa',desc:'różowa kokardka',frames:['assets/characters/pink_0.png','assets/characters/pink_1.png'],scale:.92},
- {id:'black',name:'Kicia czarna',desc:'czarno-biała',frames:['assets/characters/black_0.png','assets/characters/black_1.png'],scale:.92},
- {id:'lavender',name:'Kicia lawendowa',desc:'fioletowa kicia',frames:['assets/characters/lavender_0.png','assets/characters/lavender_1.png'],scale:.92},
- {id:'peach',name:'Kicia brzoskwiniowa',desc:'jasna i puchata',frames:['assets/characters/peach_0.png','assets/characters/peach_1.png'],scale:.92}
+ {id:'rufi',name:'Rufi',desc:'shih tzu • szybki i puchaty',frames:['rufi_1.png','rufi_2.png','rufi_3.png'],jump:'rufi_4.png',scale:1.00},
+ {id:'girl_rufi',name:'Ona + Rufi',desc:'jedzie na Rufim',frames:['girl_rufi_0.png','girl_rufi_1.png','girl_rufi_2.png','girl_rufi_3.png'],jump:'girl_rufi_4.png',scale:1.22},
+ {id:'pink',name:'Kicia różowa',desc:'różowa kokardka',frames:['pink_0.png','pink_1.png'],scale:.92},
+ {id:'black',name:'Kicia czarna',desc:'czarno-biała',frames:['black_0.png','black_1.png'],scale:.92},
+ {id:'lavender',name:'Kicia lawendowa',desc:'fioletowa kicia',frames:['lavender_0.png','lavender_1.png'],scale:.92},
+ {id:'peach',name:'Kicia brzoskwiniowa',desc:'jasna i puchata',frames:['peach_0.png','peach_1.png'],scale:.92}
 ];
 const maps=[
- {name:'Sakura',src:'assets/backgrounds/bg_0.webp',fx:'petals'},
- {name:'Kwiatowa dolina',src:'assets/backgrounds/bg_1.webp',fx:'petals'},
- {name:'Plaża',src:'assets/backgrounds/bg_2.webp',fx:'bubbles'},
- {name:'Zachód słońca',src:'assets/backgrounds/bg_3.webp',fx:'sparkles'},
- {name:'Miasteczko',src:'assets/backgrounds/bg_4.webp',fx:'petals'},
- {name:'Noc nad jeziorem',src:'assets/backgrounds/bg_5.webp',fx:'fireflies'}
+ {name:'Sakura',src:'bg_0.webp',fx:'petals'},
+ {name:'Kwiatowa dolina',src:'bg_1.webp',fx:'petals'},
+ {name:'Plaża',src:'bg_2.webp',fx:'bubbles'},
+ {name:'Zachód słońca',src:'bg_3.webp',fx:'sparkles'},
+ {name:'Miasteczko',src:'bg_4.webp',fx:'petals'},
+ {name:'Noc nad jeziorem',src:'bg_5.webp',fx:'fireflies'}
 ];
 const obstacles=[
- {name:'yarn',src:'assets/obstacles/yarn.png',w:54,h:52,kind:'bad'},
- {name:'pot',src:'assets/obstacles/pot.png',w:54,h:63,kind:'bad'},
- {name:'pillow',src:'assets/obstacles/pillow.png',w:84,h:50,kind:'bad'},
- {name:'gift',src:'assets/obstacles/gift.png',w:62,h:62,kind:'bad'},
- {name:'puddle',src:'assets/obstacles/puddle.png',w:98,h:30,kind:'bad'},
- {name:'cube',src:'assets/obstacles/cube.png',w:58,h:56,kind:'bad'},
- {name:'heart',src:'assets/obstacles/heart.png',w:42,h:36,kind:'bonus',points:30},
- {name:'fish',src:'assets/obstacles/fish.png',w:58,h:40,kind:'bonus',points:45}
+ {name:'yarn',src:'yarn.png',w:54,h:52,kind:'bad'},
+ {name:'pot',src:'pot.png',w:54,h:63,kind:'bad'},
+ {name:'pillow',src:'pillow.png',w:84,h:50,kind:'bad'},
+ {name:'gift',src:'gift.png',w:62,h:62,kind:'bad'},
+ {name:'puddle',src:'puddle.png',w:98,h:30,kind:'bad'},
+ {name:'cube',src:'cube.png',w:58,h:56,kind:'bad'},
+ {name:'heart',src:'heart.png',w:42,h:36,kind:'bonus',points:30},
+ {name:'fish',src:'fish.png',w:58,h:40,kind:'bonus',points:45}
 ];
 const STORAGE='kicia_runner_freeplay_v1';
 let state={character:'rufi',best:0}; try{Object.assign(state,JSON.parse(localStorage.getItem(STORAGE)||'{}'))}catch(e){}
