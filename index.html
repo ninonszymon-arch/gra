@@ -63,6 +63,19 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 9px 9px}.card{min-height:188px}.preview{height:128px}.preview img{height:124px}.head{padding:16px 13px 12px}.settings{margin:0 9px 9px}.foot{padding:10px;flex-direction:column;align-items:flex-start}.actions{width:100%}.actions .btn{flex:1}
  .wrap{width:calc(100% - 4px)}#gameScreen{align-items:flex-start;padding-top:3px}.game{border-radius:20px}.top{grid-template-columns:1fr auto auto;padding:8px}.top .counter:nth-of-type(2){display:none}.title span{display:none}.counter{min-width:64px;padding:6px}.stage{height:62svh;min-height:430px}#canvas{height:100%;aspect-ratio:auto;max-height:none}.dots{display:none}.hint{font-size:.69rem}
 }
+
+/* ===== V8.1: specjalna scenka tylko dla „Ona + Rufi” ===== */
+#cutsceneScreen{position:fixed;inset:0;z-index:5000;background:#09060d;display:grid;place-items:center;overflow:hidden}
+#cutsceneScreen.hidden{display:none!important}.cutsceneWrap{position:absolute;inset:0;overflow:hidden;background:#09060d}
+#cutsceneCanvas{display:block;width:100%;height:100%;touch-action:none}.cutsceneShade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.14),transparent 28%,transparent 68%,rgba(0,0,0,.24))}
+.cutsceneSkip{position:absolute;z-index:5;right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));border:1px solid rgba(255,255,255,.34);background:rgba(19,10,22,.60);backdrop-filter:blur(12px);color:#fff;padding:11px 17px;border-radius:999px;font-weight:900;cursor:pointer;box-shadow:0 9px 30px rgba(0,0,0,.25)}
+.cutsceneBubble{position:absolute;z-index:5;max-width:440px;padding:14px 20px;color:#351421;background:rgba(255,249,246,.97);border:2px solid rgba(255,143,181,.94);border-radius:24px;font-size:clamp(1rem,3.6vw,1.5rem);font-weight:950;line-height:1.25;box-shadow:0 18px 46px rgba(0,0,0,.27);opacity:0;transform:translateY(12px) scale(.94);transition:opacity .25s ease,transform .32s cubic-bezier(.2,.8,.2,1)}
+.cutsceneBubble.show{opacity:1;transform:translateY(0) scale(1)}
+.cutsceneBubble::after{content:"";position:absolute;left:40px;bottom:-15px;width:24px;height:24px;background:inherit;border-right:2px solid rgba(255,143,181,.94);border-bottom:2px solid rgba(255,143,181,.94);transform:rotate(45deg)}
+.cutsceneProgress{position:absolute;z-index:5;left:50%;bottom:max(13px,env(safe-area-inset-bottom));width:min(420px,52vw);height:4px;transform:translateX(-50%);border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}.cutsceneProgress i{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ff65a0,#ffd4e2)}
+#transitionFlash{position:fixed;inset:0;z-index:9999;background:#fff;opacity:0;pointer-events:none;transition:opacity .42s ease}#transitionFlash.on{opacity:1}
+@media(max-width:760px){.cutsceneSkip{padding:10px 15px}.cutsceneBubble{font-size:1rem;padding:12px 15px;max-width:70vw}.cutsceneProgress{width:45vw}}
+
 </style>
 </head>
 <body>
@@ -83,6 +96,17 @@ button{font:inherit}.hidden{display:none!important}.screen{min-height:100svh}.wr
  <div class="foot"><div class="choice"><b id="choiceName"></b><span id="choiceDesc"></span></div><div class="actions"><button id="random" class="btn ghost">Losuj</button><button id="start" class="btn primary" disabled>Graj</button></div></div>
 </div>
 </section>
+
+
+<section id="cutsceneScreen" class="hidden" aria-label="Scenka urodzinowa">
+ <div class="cutsceneWrap">
+  <canvas id="cutsceneCanvas"></canvas><div class="cutsceneShade"></div>
+  <button id="cutsceneSkip" class="cutsceneSkip">Pomiń ›</button>
+  <div id="cutsceneBubble" class="cutsceneBubble"></div>
+  <div class="cutsceneProgress"><i id="cutsceneProgressBar"></i></div>
+ </div>
+</section>
+<div id="transitionFlash"></div>
 
 <section id="gameScreen" class="screen hidden">
 <div class="wrap"><div class="game">
@@ -114,7 +138,8 @@ app.animFps=Math.max(5,Math.min(14,Number(app.animFps)||7));
 const save=()=>localStorage.setItem(STORE,JSON.stringify(app));
 
 const images=new Map();
-const allSources=[...CHARS.flatMap(c=>c.frames),...MAPS.map(m=>m.src),...OBSTACLES.map(o=>o.src),...COLLECTIBLES.map(c=>c.src)];
+const CUTSCENE_FRAMES=['cutscene_0.webp','cutscene_1.webp','cutscene_2.webp','cutscene_3.webp','cutscene_4.webp','cutscene_5.webp','cutscene_6.webp'];
+const allSources=[...CHARS.flatMap(c=>c.frames),...MAPS.map(m=>m.src),...OBSTACLES.map(o=>o.src),...COLLECTIBLES.map(c=>c.src),...CUTSCENE_FRAMES];
 let loaded=0;
 function loadImage(src){
  if(images.has(src)) return Promise.resolve(images.get(src));
@@ -177,7 +202,7 @@ function setHud(){
 }
 function mapToast(){const e=document.getElementById('mapName');e.textContent='Mapa: '+MAPS[mapIndex].name;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1350);setHud()}
 function milestone(text){const e=document.getElementById('milestone');e.textContent=text;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1250)}
-function startGame(){select.classList.add('hidden');gameScreen.classList.remove('hidden');document.getElementById('gameOver').classList.add('hidden');document.getElementById('pauseOverlay').classList.add('hidden');requestAnimationFrame(()=>{resize();reset();running=true;paused=false;last=performance.now();setHud();mapToast();requestAnimationFrame(loop)})}
+function startGameDirect(){select.classList.add('hidden');document.getElementById('cutsceneScreen').classList.add('hidden');gameScreen.classList.remove('hidden');document.getElementById('gameOver').classList.add('hidden');document.getElementById('pauseOverlay').classList.add('hidden');requestAnimationFrame(()=>{resize();reset();running=true;paused=false;last=performance.now();setHud();mapToast();requestAnimationFrame(loop)})}
 function reset(){elapsed=0;score=0;targetScore=0;speed=325;obstacles=[];pickups=[];particles=[];texts=[];spawnT=0;nextSpawn=1.38;pickT=0;nextPick=2.7;mapIndex=0;nextMap=1;mapBase=0;mapMix=0;mapChanging=false;lastM=0;player.vy=0;player.onGround=true;player.coyote=COYOTE;player.buffer=0;player.hold=false;player.anim=0;player.landing=0;player.y=ground-player.h;document.getElementById('score').textContent='0';document.getElementById('hint').style.opacity='1'}
 function askJump(){if(!running||paused)return;player.buffer=BUFFER;player.hold=true;document.getElementById('hint').style.opacity='0'}
 function releaseJump(){player.hold=false;if(player.vy<-245)player.vy*=.73}
@@ -233,8 +258,65 @@ function draw(){
  drawPlayer();
  for(const f of texts){ctx.save();ctx.globalAlpha=Math.min(1,f.life*2.2);ctx.fillStyle=f.color;ctx.font='900 18px Inter,system-ui,sans-serif';ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=8;ctx.fillText(f.text,f.x,f.y);ctx.restore()}
 }
-function goChars(){running=false;paused=false;gameScreen.classList.add('hidden');select.classList.remove('hidden');renderChars()}
-document.getElementById('start').onclick=startGame;
+
+/* ===== V8.1 CUTSCENE =====
+   Tylko dla postaci „Ona + Rufi”.
+   Scenka kończy się przed normalną grą — po błysku uruchamia się dokładnie istniejący runner. */
+const cutsceneScreen=document.getElementById('cutsceneScreen');
+const cutsceneCanvas=document.getElementById('cutsceneCanvas');
+const cutCtx=cutsceneCanvas.getContext('2d');
+const cutBubble=document.getElementById('cutsceneBubble');
+const cutProgress=document.getElementById('cutsceneProgressBar');
+const transitionFlash=document.getElementById('transitionFlash');
+let cutsceneActive=false,cutsceneRAF=0,cutsceneStartedAt=0,cutRect={x:0,y:0,w:0,h:0};
+const CUT_DUR=[.82,.82,.82,.84,.94,.96,.82];
+const CUT_TOTAL=CUT_DUR.reduce((a,b)=>a+b,0);
+function cutResize(){const dpr=Math.min(devicePixelRatio||1,2);cutsceneCanvas.width=Math.round(innerWidth*dpr);cutsceneCanvas.height=Math.round(innerHeight*dpr);cutCtx.setTransform(dpr,0,0,dpr,0,0)}
+addEventListener('resize',()=>{if(cutsceneActive)cutResize()});
+function smoothstep(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
+function frameAt(sec){let a=0;for(let i=0;i<CUT_DUR.length;i++){if(sec<a+CUT_DUR[i])return{i,local:(sec-a)/CUT_DUR[i]};a+=CUT_DUR[i]}return{i:CUT_DUR.length-1,local:1}}
+function drawCinematic(image,alpha,zoom,panX){
+ if(!image)return;const w=innerWidth,h=innerHeight,ir=image.naturalWidth/image.naturalHeight,cr=w/h;
+ // soft fullscreen background
+ let sw,sh,sx,sy;if(ir>cr){sh=image.naturalHeight;sw=sh*cr;sx=(image.naturalWidth-sw)*(.5+panX*.08);sy=0}else{sw=image.naturalWidth;sh=sw/cr;sx=0;sy=(image.naturalHeight-sh)/2}
+ cutCtx.save();cutCtx.globalAlpha=alpha*.45;cutCtx.filter='blur(18px) brightness(.72)';cutCtx.drawImage(image,sx,sy,sw,sh,0,0,w,h);cutCtx.restore();
+ // full uncropped panel on top so both characters stay visible on phone and PC
+ const z=zoom,fit=Math.min(w/image.naturalWidth,h/image.naturalHeight)*z,dw=image.naturalWidth*fit,dh=image.naturalHeight*fit;
+ const dx=(w-dw)/2 + panX*Math.max(0,(w-dw)*.12),dy=(h-dh)/2;
+ cutRect={x:dx,y:dy,w:dw,h:dh};
+ cutCtx.save();cutCtx.globalAlpha=alpha;cutCtx.drawImage(image,dx,dy,dw,dh);cutCtx.restore();
+}
+function positionBoyBubble(frame){
+ // Boy is on the left side in the speaking frames. Anchor the bubble to HIS side.
+ const left=Math.max(12,cutRect.x+cutRect.w*.055),top=Math.max(14,cutRect.y+cutRect.h*.055),maxW=Math.min(440,cutRect.w*.46);
+ cutBubble.style.left=left+'px';cutBubble.style.top=top+'px';cutBubble.style.right='auto';cutBubble.style.bottom='auto';cutBubble.style.maxWidth=maxW+'px';
+}
+function updateBoyDialogue(frame,local){
+ let text='';
+ if(frame===4&&local>.16)text='Kocham Cię ❤️';
+ if(frame>=5)text='Kocham Cię. Wszystkiego najlepszego, kicia ❤️';
+ if(text){positionBoyBubble(frame);if(cutBubble.textContent!==text)cutBubble.textContent=text;cutBubble.classList.add('show')}else cutBubble.classList.remove('show');
+}
+function renderCutscene(now){
+ if(!cutsceneActive)return;const sec=(now-cutsceneStartedAt)/1000;if(sec>=CUT_TOTAL){finishCutscene(false);return}
+ const f=frameAt(sec),i=f.i,p=f.local;cutCtx.clearRect(0,0,innerWidth,innerHeight);
+ const mix=smoothstep((p-.63)/.37),pan=(p-.5)*(i%2?1:-1),zoom=1.0+Math.sin(Math.PI*p)*.016;
+ drawCinematic(img(CUTSCENE_FRAMES[i]),1-mix*.94,zoom,pan);
+ if(i<CUTSCENE_FRAMES.length-1&&mix>0)drawCinematic(img(CUTSCENE_FRAMES[i+1]),mix,1.0+mix*.012,-pan*.35);
+ updateBoyDialogue(i,p);cutProgress.style.width=Math.min(100,sec/CUT_TOTAL*100)+'%';cutsceneRAF=requestAnimationFrame(renderCutscene)
+}
+function startSpecialCutscene(){running=false;paused=false;select.classList.add('hidden');gameScreen.classList.add('hidden');cutsceneScreen.classList.remove('hidden');cutsceneActive=true;cutResize();cutBubble.classList.remove('show');cutProgress.style.width='0%';cutsceneStartedAt=performance.now();cancelAnimationFrame(cutsceneRAF);cutsceneRAF=requestAnimationFrame(renderCutscene)}
+function finishCutscene(skipped){
+ if(!cutsceneActive)return;cutsceneActive=false;cancelAnimationFrame(cutsceneRAF);cutBubble.classList.remove('show');
+ // White teleport flash. Behind it we start the EXISTING game with Ona + Rufi.
+ transitionFlash.classList.add('on');
+ setTimeout(()=>{cutsceneScreen.classList.add('hidden');startGameDirect();setTimeout(()=>transitionFlash.classList.remove('on'),120)},400)
+}
+function requestGameStart(){if(selected.id==='girlRufi')startSpecialCutscene();else startGameDirect()}
+document.getElementById('cutsceneSkip').onclick=()=>finishCutscene(true);
+
+function goChars(){running=false;paused=false;cutsceneActive=false;cancelAnimationFrame(cutsceneRAF);cutsceneScreen.classList.add('hidden');gameScreen.classList.add('hidden');select.classList.remove('hidden');renderChars()}
+document.getElementById('start').onclick=requestGameStart;
 document.getElementById('again').onclick=()=>{document.getElementById('gameOver').classList.add('hidden');resize();reset();running=true;last=performance.now();requestAnimationFrame(loop)};
 document.getElementById('pause').onclick=()=>{if(!running)return;paused=true;document.getElementById('pauseOverlay').classList.remove('hidden')};
 document.getElementById('resume').onclick=()=>{document.getElementById('pauseOverlay').classList.add('hidden');paused=false;last=performance.now()};

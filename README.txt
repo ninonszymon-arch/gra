@@ -1,31 +1,10 @@
-Kicia & Rufi Runner V7
+Kicia & Rufi Runner V8.1 — poprawiona scenka
 
-NAJWAŻNIEJSZA ZMIANA:
-- każda klatka każdej postaci jest osobnym pełnym PNG
-- gra nie używa atlasu sprite'ów
-- gra niczego nie tnie na prostokąty
-- każda klatka ma 640x512 px z dużym przezroczystym marginesem
-- ta sama skala i linia ziemi dla wszystkich klatek danej postaci
-- wszystkie obrazki są preładowane przed włączeniem przycisku GRAJ, więc nie ma migania pustymi klatkami
-
-POSTACIE:
-- Różowa Kicia
-- Brzoskwiniowa Kicia
-- Czarna Kicia
-- Lawendowa Kicia
-- Rufi
-- Ona + Rufi
-
-GRA:
-- regulacja animacji postaci 5–14 FPS
-- 9 nowych dużych przeszkód
-- 9 nowych bonusów
-- bonus płynnie leci do licznika i punkty są tweenowane
-- animowane komunikaty nagród
-- 7 map zmienianych płynnie co około 500 punktów
-- telefon: dotyk
-- komputer: klik / spacja
-
-GITHUB:
-- wszystko jest płasko obok index.html
-- nie ma folderu assets
+- Scenka uruchamia się TYLKO dla „Ona + Rufi”.
+- Używa tylko romantycznych klatek. Nie ma żadnych dodatkowych wymyślonych klatek gameplayu.
+- To chłopak mówi w swojej chmurce: „Kocham Cię” oraz „Kocham Cię. Wszystkiego najlepszego, kicia”.
+- Chmurka jest zakotwiczona po stronie chłopaka.
+- Całość ma płynne przejścia, delikatny ruch kamery i crossfade.
+- „Pomiń ›” działa cały czas.
+- Po końcu scenki: biały błysk -> natychmiast istniejąca gra -> Ona + Rufi zaczyna normalnie biec/skakać.
+- Mechanika normalnej gry nie została zmieniona.
