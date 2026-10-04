@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#140a19">
-<title>Kicia & Rufi Runner V8.5</title>
+<title>Kicia & Rufi Runner V8.6</title>
 <style>
 :root{
  --bg:#0b0710;--panel:#1b1121;--line:rgba(255,255,255,.11);
@@ -104,7 +104,7 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
  <div class="head">
   <div class="tag"><i></i> wybierz postać</div>
   <h1>Kicia & <em>Rufi</em> Runner</h1>
-  <p>V8.5 — stare mapy zostają • pewniejszy skok na telefonie • przeszkody z dołu i z góry.</p>
+  <p>V8.6 — stare mapy zostają • przeszkody są osadzone w ziemi • poprawiony telefon.</p>
   <div class="loader"><i id="loadbar"></i></div><div id="loadtxt" class="loadtxt">Ładowanie grafik...</div>
  </div>
  <div id="grid" class="grid"></div>
@@ -277,7 +277,9 @@ function spawnGroundObstacle(off=0,sc=1){
  const mobileScale=isMobile()?.84:1;
  const s=(.96+Math.random()*.08)*sc*mobileScale;
  const w=d.w*s,h=d.h*s;
- obstacles.push({kind:'ground',d,x:W+110+off,y:ground-h,w,h})
+ // Wkładamy dolną część grafiki w ziemię zamiast stawiać ją "na" ziemi.
+ const sink=Math.max(isMobile()?10:8,h*(isMobile()?.16:.13));
+ obstacles.push({kind:'ground',d,x:W+110+off,y:ground-h+sink,w,h,sink})
 }
 function spawnUpperObstacle(off=0,sc=1){
  const d=UPPER_OBSTACLES[Math.floor(Math.random()*UPPER_OBSTACLES.length)];
@@ -309,7 +311,8 @@ function hit(a,o,ratio=.68){
   const pr=m?.54:.60,ox=o.x+o.w*(1-pr)/2,oy=o.y+o.h*.13,ow=o.w*pr,oh=o.h*.69;
   return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy
  }
- const pr=m?.55:ratio,ox=o.x+o.w*(1-pr)/2,oy=o.y+o.h*(1-pr),ow=o.w*pr,oh=o.h*pr;
+ const visibleH=o.h-(o.sink||0);
+ const pr=m?.55:ratio,ox=o.x+o.w*(1-pr)/2,oy=o.y+visibleH*(1-pr),ow=o.w*pr,oh=visibleH*pr;
  return ax<ox+ow&&ax+aw>ox&&ay<oy+oh&&ay+ah>oy
 }
 function collect(p){
@@ -398,8 +401,26 @@ function draw(){
    ctx.moveTo(e.x+e.w*.5,0);ctx.lineTo(e.x+e.w*.5,e.y+sway+10);ctx.stroke();ctx.restore();
    drawContain(img(e.d.src),e.x,e.y+sway,e.w,e.h)
   }else{
-   drawContain(img(e.d.src),e.x,e.y,e.w,e.h);ctx.save();ctx.globalAlpha=.17;ctx.fillStyle='#000';
-   ctx.beginPath();ctx.ellipse(e.x+e.w*.5,ground+5,e.w*.30,6,0,0,Math.PI*2);ctx.fill();ctx.restore()
+   // Cień przy samej ziemi pomaga "przykleić" przeszkodę do podłoża.
+   ctx.save();
+   ctx.globalAlpha=.18;ctx.fillStyle='#000';
+   ctx.beginPath();ctx.ellipse(e.x+e.w*.5,ground-1,e.w*.31,Math.max(4,e.h*.045),0,0,Math.PI*2);ctx.fill();
+   ctx.restore();
+
+   // Dolne kilkanaście procent grafiki jest schowane pod linią ziemi.
+   ctx.save();
+   ctx.beginPath();ctx.rect(0,0,W,ground+1);ctx.clip();
+   drawContain(img(e.d.src),e.x,e.y,e.w,e.h);
+   ctx.restore();
+
+   // Delikatne przyciemnienie samej podstawy, żeby nie wyglądała jak naklejona.
+   ctx.save();
+   const baseGrad=ctx.createLinearGradient(0,ground-12,0,ground+2);
+   baseGrad.addColorStop(0,'rgba(0,0,0,0)');
+   baseGrad.addColorStop(1,'rgba(0,0,0,.20)');
+   ctx.fillStyle=baseGrad;
+   ctx.fillRect(e.x+e.w*.14,ground-12,e.w*.72,13);
+   ctx.restore()
   }
  }
  for(const p of pickups){const s=p.scale||1,w=p.w*s,h=p.h*s;drawContain(img(p.d.src),p.x+(p.w-w)/2,p.y+(p.h-h)/2,w,h)}

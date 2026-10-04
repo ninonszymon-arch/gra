@@ -1,27 +1,15 @@
-Kicia & Rufi Runner V8.5 — PATCH DO ISTNIEJĄCEGO REPO GITHUB
+Kicia & Rufi Runner V8.6 — GROUNDED OBSTACLES
 
-WAŻNE:
-- Ten ZIP NIE zastępuje map_1.webp ... map_7.webp.
-- Stare tła zostają dokładnie takie jak były.
-- Nie usuwaj starych map z repo.
+Co poprawiono względem V8.5:
+- dolne przeszkody są teraz częściowo WSTAWIONE W ZIEMIĘ
+- około 13–16% dolnej części jest schowane pod linią podłoża
+- grafika jest przycinana dokładnie na poziomie ziemi
+- dodany subtelny cień / przyciemnienie przy podstawie
+- hitbox uwzględnia tylko widoczną część przeszkody
+- stare tła map_1.webp ... map_7.webp nadal zostają i NIE są zmieniane
+- górne przeszkody, ekran urodzinowy i poprawiona mechanika telefonu zostają z V8.5
 
-Wrzuć do istniejącego repo pliki z ZIP-a:
-index.html
-birthday_intro.webp
-upper_0.png ... upper_8.png
+Wrzuć pliki z ZIP-a do istniejącego repo i zastąp index.html.
+Nie usuwaj starych map map_1.webp ... map_7.webp.
 
-Zmiany:
-- tylko „Ona + Rufi” ma na początku ekran: „Wszystkiego najlepszego, kocham Cię!”
-- spadające płatki róż
-- po intro od razu stara mapa 1, bez czarnego ekranu
-- nowe, wygenerowane przeszkody wiszące z góry
-- stare dolne przeszkody zostają
-- na telefonie dotknięcie daje pełny skok
-- puszczenie palca nie ucina skoku
-- dolne przeszkody są na telefonie ~16% mniejsze
-- większy jump buffer/coyote time
-- więcej czasu na reakcję i większy odstęp między przeszkodami
-- łagodniejsze hitboxy
-- orientacyjny apex mobilnego skoku: 226px
-
-Walidacja JS: OK
+Walidacja JavaScript: OK
