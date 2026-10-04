@@ -1,21 +1,31 @@
-Kicia & Rufi Runner V5
+Kicia & Rufi Runner V7
 
-Najważniejsze poprawki:
-- nowe arkusze AI postaci
-- ZERO indywidualnego docinania klatek animacji
-- wszystkie klatki jednej postaci używają dokładnie tego samego prostokąta źródłowego
-- wszystkie klatki mają identyczną skalę, pozycję X i linię ziemi
-- duży przezroczysty margines bezpieczeństwa wokół postaci
-- brak crossfade'u między klatkami
-- domyślne 7 FPS postaci, regulacja 5–18 FPS
-- 8 klatek chodu / biegu
-- stabilna klatka skoku i lądowania
-- nowe większe przeszkody
-- płynne zbieranie bonusów: przedmiot leci do licznika po łuku
-- punkty są doliczane stopniowo, bez nagłego skoku
-- animowany napis za zebraną nagrodę
-- nowa kraina co 500 punktów z płynnym crossfade'em
-- 7 różnych teł
+NAJWAŻNIEJSZA ZMIANA:
+- każda klatka każdej postaci jest osobnym pełnym PNG
+- gra nie używa atlasu sprite'ów
+- gra niczego nie tnie na prostokąty
+- każda klatka ma 640x512 px z dużym przezroczystym marginesem
+- ta sama skala i linia ziemi dla wszystkich klatek danej postaci
+- wszystkie obrazki są preładowane przed włączeniem przycisku GRAJ, więc nie ma migania pustymi klatkami
+
+POSTACIE:
+- Różowa Kicia
+- Brzoskwiniowa Kicia
+- Czarna Kicia
+- Lawendowa Kicia
+- Rufi
+- Ona + Rufi
+
+GRA:
+- regulacja animacji postaci 5–14 FPS
+- 9 nowych dużych przeszkód
+- 9 nowych bonusów
+- bonus płynnie leci do licznika i punkty są tweenowane
+- animowane komunikaty nagród
+- 7 map zmienianych płynnie co około 500 punktów
 - telefon: dotyk
 - komputer: klik / spacja
-- wszystko jest płasko obok index.html, bez folderu assets
+
+GITHUB:
+- wszystko jest płasko obok index.html
+- nie ma folderu assets
