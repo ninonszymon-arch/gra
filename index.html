@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#140a19">
-<title>Kicia & Rufi Runner V8.6</title>
+<title>Kicia & Rufi Runner V8.7</title>
 <style>
 :root{
  --bg:#0b0710;--panel:#1b1121;--line:rgba(255,255,255,.11);
@@ -104,7 +104,7 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
  <div class="head">
   <div class="tag"><i></i> wybierz postać</div>
   <h1>Kicia & <em>Rufi</em> Runner</h1>
-  <p>V8.6 — stare mapy zostają • przeszkody są osadzone w ziemi • poprawiony telefon.</p>
+  <p>V8.7 — stare mapy zostają • łagodniejsze cienie • płynniejszy ruch postaci.</p>
   <div class="loader"><i id="loadbar"></i></div><div id="loadtxt" class="loadtxt">Ładowanie grafik...</div>
  </div>
  <div id="grid" class="grid"></div>
@@ -147,7 +147,7 @@ const CHARS=[{"id": "pink", "name": "Różowa Kicia", "desc": "różowa kicia", 
 const STORE='kicia_rufi_runner_v7';
 let app={character:'pink',best:0,animFps:7};
 try{Object.assign(app,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}
-app.animFps=Math.max(5,Math.min(14,Number(app.animFps)||7));
+app.animFps=Math.max(5,Math.min(16,Number(app.animFps)||8));
 const save=()=>localStorage.setItem(STORE,JSON.stringify(app));
 
 const images=new Map();
@@ -194,14 +194,14 @@ function renderChars(){
 function updateChoice(){document.getElementById('choiceName').textContent=selected.name;document.getElementById('choiceDesc').textContent=selected.desc}
 renderChars();
 
-function feel(v){if(v<=5)return'Bardzo spokojnie';if(v<=7)return'Naturalnie';if(v<=9)return'Żwawiej';if(v<=12)return'Płynniej';return'Szybko'}
+function feel(v){if(v<=5)return'Bardzo spokojnie';if(v<=7)return'Naturalnie';if(v<=9)return'Żwawiej';if(v<=12)return'Płynniej';if(v<=14)return'Bardzo płynnie';return'Maks płynność'}
 const fpsSlider=document.getElementById('fpsSlider'),fpsValue=document.getElementById('fpsValue'),fpsFeel=document.getElementById('fpsFeel');
 function setAnimFps(v){
- app.animFps=Math.max(5,Math.min(14,Number(v)||7));fpsSlider.value=app.animFps;fpsValue.textContent=app.animFps+' FPS';fpsFeel.textContent=feel(app.animFps);document.getElementById('gameFpsLabel').textContent=app.animFps+' FPS';document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('on',Number(b.dataset.v)===app.animFps));save()
+ app.animFps=Math.max(5,Math.min(16,Number(v)||8));fpsSlider.value=app.animFps;fpsValue.textContent=app.animFps+' FPS';fpsFeel.textContent=feel(app.animFps);document.getElementById('gameFpsLabel').textContent=app.animFps+' FPS';document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('on',Number(b.dataset.v)===app.animFps));save()
 }
 fpsSlider.oninput=e=>setAnimFps(e.target.value);
 document.querySelectorAll('.preset').forEach(b=>b.onclick=()=>setAnimFps(b.dataset.v));
-setAnimFps(app.animFps);
+setAnimFps(app.animFps||8);
 document.getElementById('random').onclick=()=>{selected=CHARS[Math.floor(Math.random()*CHARS.length)];app.character=selected.id;save();renderChars()};
 
 const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('stage');
@@ -384,11 +384,29 @@ function updateFX(dt){
 }
 function drawBg(image,progress,alpha){if(!image)return;const ir=image.naturalWidth/image.naturalHeight,cr=W/H;let sw,sh,sx,sy;if(ir>cr){sh=image.naturalHeight;sw=sh*cr;sx=(image.naturalWidth-sw)*Math.max(0,Math.min(1,progress));sy=0}else{sw=image.naturalWidth;sh=sw/cr;sx=0;sy=(image.naturalHeight-sh)/2}ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(image,sx,sy,sw,sh,0,0,W,H);ctx.restore()}
 function drawContain(image,x,y,w,h,alpha=1){if(!image)return;const r=Math.min(w/image.naturalWidth,h/image.naturalHeight),dw=image.naturalWidth*r,dh=image.naturalHeight*r;ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(image,x+(w-dw)/2,y+(h-dh)/2,dw,dh);ctx.restore()}
-function playerFrame(){if(!player.onGround)return 6;if(player.landing>0)return 7;return Math.floor(player.anim*app.animFps)%6}
+function drawContainFx(image,x,y,w,h,{alpha=1,scaleX=1,scaleY=1,rot=0}={}){
+ if(!image)return;const r=Math.min(w/image.naturalWidth,h/image.naturalHeight),dw=image.naturalWidth*r,dh=image.naturalHeight*r,cx=x+w/2,cy=y+h/2;
+ ctx.save();ctx.translate(cx,cy);ctx.rotate(rot);ctx.scale(scaleX,scaleY);ctx.globalAlpha=alpha;ctx.drawImage(image,-dw/2,-dh/2,dw,dh);ctx.restore()
+}
+function playerBlendState(){
+ if(!player.onGround){
+  const rise=Math.max(-1,Math.min(1,player.vy/620));
+  return{a:6,b:7,mix:(rise+1)/2,bob:-1.2,rot:Math.max(-.22,Math.min(.26,player.vy/3200)),sx:1+Math.abs(player.vy)*0.00006,sy:1-Math.abs(player.vy)*0.000045}
+ }
+ if(player.landing>0){
+  const t=1-Math.max(0,Math.min(1,player.landing/.11));
+  return{a:7,b:0,mix:t,bob:Math.sin(t*Math.PI)*1.2,rot:(1-t)*.03,sx:1+.03*(1-t),sy:1-.03*(1-t)}
+ }
+ const seq=[0,1,2,3,4,5,4,3,2,1];
+ const phase=player.anim*(app.animFps*.92),base=Math.floor(phase)%seq.length,mix=phase-Math.floor(phase);
+ const stride=Math.sin((phase/seq.length)*Math.PI*2);
+ return{a:seq[base],b:seq[(base+1)%seq.length],mix,bob:stride*1.15,rot:stride*.018,sx:1+Math.max(0,stride)*.012,sy:1-Math.max(0,-stride)*.012}
+}
 function drawPlayer(){
- ctx.save();ctx.globalAlpha=player.onGround?.21:.10;ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(player.x+player.w*.49,ground+5,player.w*.32,7,0,0,Math.PI*2);ctx.fill();ctx.restore();
- const frame=playerFrame(),bob=player.onGround?Math.sin(player.anim*app.animFps*Math.PI/3)*.7:0;
- drawContain(img(selected.frames[frame]),player.x,player.y+bob,player.w,player.h)
+ ctx.save();ctx.globalAlpha=player.onGround?.10:.05;ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(player.x+player.w*.49,ground+4,player.w*.26,Math.max(4,player.h*.045),0,0,Math.PI*2);ctx.fill();ctx.restore();
+ const s=playerBlendState(),a=img(selected.frames[s.a]),b=img(selected.frames[s.b]),py=player.y+(s.bob||0),fx={alpha:1-(s.mix||0),scaleX:s.sx||1,scaleY:s.sy||1,rot:s.rot||0};
+ drawContainFx(a,player.x,py,player.w,player.h,fx);
+ if((s.mix||0)>.001&&b)drawContainFx(b,player.x,py,player.w,player.h,{alpha:s.mix,scaleX:s.sx||1,scaleY:s.sy||1,rot:s.rot||0})
 }
 function draw(){
  ctx.clearRect(0,0,W,H);drawBg(img(MAPS[mapIndex].src),mapProgress(),1);if(mapChanging)drawBg(img(MAPS[nextMap].src),0,mapMix);
@@ -401,25 +419,25 @@ function draw(){
    ctx.moveTo(e.x+e.w*.5,0);ctx.lineTo(e.x+e.w*.5,e.y+sway+10);ctx.stroke();ctx.restore();
    drawContain(img(e.d.src),e.x,e.y+sway,e.w,e.h)
   }else{
-   // Cień przy samej ziemi pomaga "przykleić" przeszkodę do podłoża.
+   // Bardzo subtelny cień kontaktowy, żeby przeszkoda nie wyglądała jak przyklejona naklejka.
    ctx.save();
-   ctx.globalAlpha=.18;ctx.fillStyle='#000';
-   ctx.beginPath();ctx.ellipse(e.x+e.w*.5,ground-1,e.w*.31,Math.max(4,e.h*.045),0,0,Math.PI*2);ctx.fill();
+   ctx.globalAlpha=.07;ctx.fillStyle='#000';
+   ctx.beginPath();ctx.ellipse(e.x+e.w*.5,ground-.5,e.w*.24,Math.max(3,e.h*.03),0,0,Math.PI*2);ctx.fill();
    ctx.restore();
 
-   // Dolne kilkanaście procent grafiki jest schowane pod linią ziemi.
+   // Dolna część grafiki jest schowana pod linią ziemi.
    ctx.save();
    ctx.beginPath();ctx.rect(0,0,W,ground+1);ctx.clip();
    drawContain(img(e.d.src),e.x,e.y,e.w,e.h);
    ctx.restore();
 
-   // Delikatne przyciemnienie samej podstawy, żeby nie wyglądała jak naklejona.
+   // Lekka miękka poświata przy bazie zamiast ciężkiego cienia.
    ctx.save();
-   const baseGrad=ctx.createLinearGradient(0,ground-12,0,ground+2);
+   const baseGrad=ctx.createLinearGradient(0,ground-8,0,ground+1);
    baseGrad.addColorStop(0,'rgba(0,0,0,0)');
-   baseGrad.addColorStop(1,'rgba(0,0,0,.20)');
+   baseGrad.addColorStop(1,'rgba(0,0,0,.08)');
    ctx.fillStyle=baseGrad;
-   ctx.fillRect(e.x+e.w*.14,ground-12,e.w*.72,13);
+   ctx.fillRect(e.x+e.w*.20,ground-8,e.w*.60,9);
    ctx.restore()
   }
  }

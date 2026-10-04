@@ -1,15 +1,12 @@
-Kicia & Rufi Runner V8.6 — GROUNDED OBSTACLES
+Kicia & Rufi Runner V8.7 — SMOOTHER ANIM
 
-Co poprawiono względem V8.5:
-- dolne przeszkody są teraz częściowo WSTAWIONE W ZIEMIĘ
-- około 13–16% dolnej części jest schowane pod linią podłoża
-- grafika jest przycinana dokładnie na poziomie ziemi
-- dodany subtelny cień / przyciemnienie przy podstawie
-- hitbox uwzględnia tylko widoczną część przeszkody
-- stare tła map_1.webp ... map_7.webp nadal zostają i NIE są zmieniane
-- górne przeszkody, ekran urodzinowy i poprawiona mechanika telefonu zostają z V8.5
+Co poprawiono:
+- dużo delikatniejsze cienie pod dolnymi przeszkodami
+- miększy cień postaci
+- płynniejszy ruch postaci przez blendowanie klatek (crossfade między klatkami)
+- sekwencja biegu została wydłużona do ping-pong 10 faz: 0-1-2-3-4-5-4-3-2-1
+- skok i lądowanie mają dodatkowe przejścia, obrót i lekki squash/stretch
+- stare tła zostają bez zmian
+- poprawki telefonu z poprzedniej wersji zostają
 
-Wrzuć pliki z ZIP-a do istniejącego repo i zastąp index.html.
-Nie usuwaj starych map map_1.webp ... map_7.webp.
-
-Walidacja JavaScript: OK
+Plik ZIP to patch: podmień index.html oraz pliki upper_*.png w repo gry.
