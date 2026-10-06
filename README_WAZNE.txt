@@ -1,25 +1,29 @@
-Kicia & Rufi Runner V11 — ALL NEW SPRITES
+Kicia & Rufi Runner V12 — NEW FRAMES + NATURAL JUMP
 
-POPRAWKA:
-- usunięte stare sprite sheety wszystkich postaci
-- wstawione najnowsze wygenerowane animacje
-- Ona + Rufi używa teraz NAJNOWSZEGO pliku z dziewczyną na psie
-  (tego wygenerowanego po poprawce: „łapki mają chodzić góra-dół”)
-- Rufi również używa najnowszej poprawionej animacji przednich łap
+POSTACIE:
+- wszystkie sześć postaci korzysta z najnowszych, od nowa wygenerowanych sprite sheetów
+- stare sprite sheety zostały usunięte
+- każda klatka została oczyszczona i wyrównana do wspólnej linii łap
+- animacja biegu: prawdziwe klatki przy stałych 7 FPS
+- skok używa osobnej sekwencji klatek przez cały łuk skoku
 
-Nowe pliki mają nazwy *_v11_sheet.png oraz *_v11_preview.png,
-więc GitHub / telefon nie powinien wczytać starego obrazka z cache.
+MECHANIKA SKOKU:
+- NIE kopiuje Chrome Dino
+- brak sztucznej niewidzialności / przebaczania kolizji
+- tap daje natychmiastowy, krótki łuk
+- JUMP_MOBILE = -710
+- GRAVITY_MOBILE = 2100
+- wysokość fizycznego skoku ≈ 120px
+- czas w powietrzu ≈ 0.68s
+- przeszkoda w tym czasie przejeżdża ≈ 120–153px
+- największa dolna przeszkoda na telefonie ma ≈ 101px szerokości
+- więc skok ma ją faktycznie przeskoczyć, nie przechodzić przez hitbox
 
-Siatki:
-- koty: 4x4 = 16 klatek
-- Rufi: 4x3 = 12 klatek
-- Ona + Rufi: 4x5 = 20 klatek
+TELEFON:
+- pointerdown = natychmiastowy skok
+- puszczenie palca nie ucina skoku
+- większe odstępy między przeszkodami
+- górne przeszkody pojawiają się dopiero później
+- pion i poziom nadal działają
 
-Każda klatka została:
-- oczyszczona z artefaktów tła
-- wyrównana do jednej linii podłoża
-- przeskalowana identycznie w obrębie jednej postaci
-żeby postać nie skakała rozmiarem między klatkami.
-
-Mechanika skoku z V10.2 zostaje.
 JavaScript: OK
