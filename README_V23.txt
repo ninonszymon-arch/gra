@@ -1,0 +1,11 @@
+V23
+- wszystkie postacie: 7 FPS
+- pierwsze 5 postaci wróciło do wcześniejszych pojedynczych klatek chodzenia
+- avatar = jedna normalna klatka, nie 4 miniatury
+- Ona + Rufi: 12 klatek, bieg korzysta z 8 klatek przy 7 FPS
+- skok: niższy i szybszy, po paraboli
+- telefon: ~0.72 s / min. 164 px wysokości
+- startowa prędkość telefonu: 192 px/s
+- w czasie skoku przeszkoda przesuwa się ~138px
+- największa dolna przeszkoda mobile ma wizualnie ~124px szerokości
+- przeszkody nadal są większe i czytelniejsze

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#140a19">
-<title>Kicia & Rufi Runner V22</title>
+<title>Kicia & Rufi Runner V23</title>
 <style>
 :root{
  --bg:#0b0710;--panel:#1b1121;--line:rgba(255,255,255,.11);
@@ -56,12 +56,12 @@ button{font:inherit;touch-action:manipulation;-webkit-user-select:none;user-sele
 .milestone.show{opacity:1;transform:translate(-50%,0) scale(1)}
 @keyframes sparkle{from{transform:translateY(-50%) scale(.7) rotate(-12deg);opacity:.5}to{transform:translateY(-50%) scale(1.15) rotate(12deg);opacity:1}}
 .bottom{padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);background:#110b15}
-.who{display:flex;align-items:center;gap:8px}.avatar{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:contain}.who b{display:block}.who span{font-size:.7rem;color:#b2a0ac}
+.who{display:flex;align-items:center;gap:8px}.avatar{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:contain;padding:3px}.who b{display:block}.who span{font-size:.7rem;color:#b2a0ac}
 .dots{display:flex;gap:5px}.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.17)}.dots i.on{background:var(--pink);box-shadow:0 0 10px rgba(255,111,166,.7)}
 .overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(5,4,7,.66);backdrop-filter:blur(6px);z-index:12;padding:16px}.over{width:min(410px,100%);padding:21px;border-radius:27px;background:rgba(23,15,28,.96);border:1px solid rgba(255,255,255,.13);text-align:center;box-shadow:var(--shadow)}.over h2{font-size:2rem;margin:0 0 7px}.over p{margin:0 0 15px;color:var(--muted);line-height:1.6}.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}.stat{padding:11px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line)}.stat b{display:block;font-size:1.15rem}.stat span{font-size:.68rem;color:#b09eaa}
 @media(max-width:760px){
  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 9px 9px}.card{min-height:188px}.preview{height:128px}.preview img{height:124px}.head{padding:16px 13px 12px}.settings{margin:0 9px 9px}.foot{padding:10px;flex-direction:column;align-items:flex-start}.actions{width:100%}.actions .btn{flex:1}
- .wrap{width:calc(100% - 4px)}#gameScreen{align-items:flex-start;padding-top:3px}.game{border-radius:20px}.top{grid-template-columns:1fr auto auto;padding:8px}.top .counter:nth-of-type(2){display:none}.title span{display:none}.counter{min-width:64px;padding:6px}.stage{height:68svh;min-height:460px}#canvas{height:100%;aspect-ratio:auto;max-height:none}.dots{display:none}.hint{font-size:.69rem}
+ .wrap{width:calc(100% - 4px)}#gameScreen{align-items:flex-start;padding-top:3px}.game{border-radius:20px}.top{grid-template-columns:1fr auto auto;padding:8px}.top .counter:nth-of-type(2){display:none}.title span{display:none}.counter{min-width:64px;padding:6px}.stage{height:64svh;min-height:430px}#canvas{height:100%;aspect-ratio:auto;max-height:none}.dots{display:none}.hint{font-size:.69rem}
 }
 
 
@@ -166,8 +166,8 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
 </section>
 
 <script>
-const CHARS=[{"id": "pink", "name": "Różowa Kicia", "desc": "różowa kicia", "scale": 1.0, "sheet": "pink_v18_sheet.png", "preview": "pink_v18_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 15, "jumpStart": 12, "jumpAir": 13, "jumpPeak": 14}, {"id": "peach", "name": "Brzoskwiniowa Kicia", "desc": "brzoskwiniowa kicia", "scale": 1.0, "sheet": "peach_v18_sheet.png", "preview": "peach_v18_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 15, "jumpStart": 12, "jumpAir": 13, "jumpPeak": 14}, {"id": "black", "name": "Czarna Kicia", "desc": "czarno-biała kicia", "scale": 1.0, "sheet": "black_v18_sheet.png", "preview": "black_v18_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 15, "jumpStart": 12, "jumpAir": 13, "jumpPeak": 14}, {"id": "lavender", "name": "Lawendowa Kicia", "desc": "lawendowa kicia", "scale": 1.0, "sheet": "lavender_v18_sheet.png", "preview": "lavender_v18_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 15, "jumpStart": 12, "jumpAir": 13, "jumpPeak": 14}, {"id": "rufi", "name": "Rufi", "desc": "Rufi", "scale": 1.1, "sheet": "rufi_v18_sheet.png", "preview": "rufi_v18_preview.png", "frameCols": 4, "frameRows": 4, "frameCount": 16, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 15, "jumpStart": 12, "jumpAir": 13, "jumpPeak": 14}, {"id": "girlRufi", "name": "Ona + Rufi", "desc": "ona jedzie na Rufim", "scale": 1.18, "sheet": "girlRufi_v22_sheet.png", "preview": "girlRufi_v22_preview.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}], MAPS=[{"name": "Kwitnąca dolina", "src": "map_1.webp", "fx": "petals"}, {"name": "Plaża", "src": "map_2.webp", "fx": "bubbles"}, {"name": "Noc nad jeziorem", "src": "map_3.webp", "fx": "fireflies"}, {"name": "Miasteczko", "src": "map_4.webp", "fx": "petals"}, {"name": "Sakura", "src": "map_5.webp", "fx": "petals"}, {"name": "Zachód słońca", "src": "map_6.webp", "fx": "bubbles"}, {"name": "Księżycowa kraina", "src": "map_7.webp", "fx": "fireflies"}], OBSTACLES=[{"src": "obstacle_0.png", "name": "kałuża", "w": 166, "h": 74, "hit": 0.58}, {"src": "obstacle_1.png", "name": "poduszka", "w": 132, "h": 92, "hit": 0.7}, {"src": "obstacle_2.png", "name": "doniczka", "w": 112, "h": 126, "hit": 0.7}, {"src": "obstacle_3.png", "name": "klocki", "w": 130, "h": 116, "hit": 0.7}, {"src": "obstacle_4.png", "name": "miękka kostka", "w": 132, "h": 124, "hit": 0.72}, {"src": "obstacle_5.png", "name": "stołeczek", "w": 124, "h": 112, "hit": 0.7}, {"src": "obstacle_6.png", "name": "rozlana woda", "w": 170, "h": 84, "hit": 0.58}, {"src": "obstacle_7.png", "name": "kocia poducha", "w": 142, "h": 88, "hit": 0.68}, {"src": "obstacle_8.png", "name": "koszyk", "w": 136, "h": 126, "hit": 0.72}], UPPER_OBSTACLES=[{"src": "upper_0.png", "w": 122, "h": 132, "hit": 0.62}, {"src": "upper_1.png", "w": 102, "h": 126, "hit": 0.62}, {"src": "upper_2.png", "w": 116, "h": 122, "hit": 0.62}, {"src": "upper_3.png", "w": 108, "h": 118, "hit": 0.62}, {"src": "upper_4.png", "w": 122, "h": 126, "hit": 0.62}, {"src": "upper_5.png", "w": 106, "h": 116, "hit": 0.62}, {"src": "upper_6.png", "w": 126, "h": 118, "hit": 0.62}, {"src": "upper_7.png", "w": 110, "h": 126, "hit": 0.62}, {"src": "upper_8.png", "w": 118, "h": 132, "hit": 0.62}], COLLECTIBLES=[{"src": "collect_0.png", "name": "Serduszko", "points": 25, "w": 72, "h": 70, "color": "#ff75a9"}, {"src": "collect_1.png", "name": "Prezent", "points": 60, "w": 78, "h": 78, "color": "#ffd06d"}, {"src": "collect_2.png", "name": "Rybka", "points": 45, "w": 82, "h": 66, "color": "#69d4ff"}, {"src": "collect_3.png", "name": "Włóczka", "points": 35, "w": 76, "h": 72, "color": "#bc8cff"}, {"src": "collect_4.png", "name": "Gwiazdka", "points": 50, "w": 74, "h": 74, "color": "#ffe06b"}, {"src": "collect_5.png", "name": "Kryształ", "points": 70, "w": 74, "h": 74, "color": "#ff84ce"}, {"src": "collect_6.png", "name": "Ciasteczko", "points": 30, "w": 72, "h": 68, "color": "#e7b265"}, {"src": "collect_7.png", "name": "Dzwoneczek", "points": 55, "w": 72, "h": 72, "color": "#ffd85e"}, {"src": "collect_8.png", "name": "Kokardka", "points": 40, "w": 76, "h": 70, "color": "#ff86b8"}];
-const STORE='kicia_rufi_runner_v22_phone_jump_big_obstacles';
+const CHARS=[{"id": "pink", "name": "Różowa Kicia", "desc": "różowa kicia", "scale": 1.0, "sheet": "pink_v23_classic_sheet.png", "preview": "pink_v23_avatar.png", "frameCols": 4, "frameRows": 2, "frameCount": 8, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 6, "jumpStart": 4, "jumpAir": 5, "jumpPeak": 5}, {"id": "peach", "name": "Brzoskwiniowa Kicia", "desc": "brzoskwiniowa kicia", "scale": 1.0, "sheet": "peach_v23_classic_sheet.png", "preview": "peach_v23_avatar.png", "frameCols": 4, "frameRows": 2, "frameCount": 8, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 6, "jumpStart": 4, "jumpAir": 5, "jumpPeak": 5}, {"id": "black", "name": "Czarna Kicia", "desc": "czarno-biała kicia", "scale": 1.0, "sheet": "black_v23_classic_sheet.png", "preview": "black_v23_avatar.png", "frameCols": 4, "frameRows": 2, "frameCount": 8, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 6, "jumpStart": 4, "jumpAir": 5, "jumpPeak": 5}, {"id": "lavender", "name": "Lawendowa Kicia", "desc": "lawendowa kicia", "scale": 1.0, "sheet": "lavender_v23_classic_sheet.png", "preview": "lavender_v23_avatar.png", "frameCols": 4, "frameRows": 2, "frameCount": 8, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 6, "jumpStart": 4, "jumpAir": 5, "jumpPeak": 5}, {"id": "rufi", "name": "Rufi", "desc": "Rufi", "scale": 1.1, "sheet": "rufi_v23_classic_sheet.png", "preview": "rufi_v23_avatar.png", "frameCols": 4, "frameRows": 2, "frameCount": 8, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 6, "jumpStart": 4, "jumpAir": 5, "jumpPeak": 5}, {"id": "girlRufi", "name": "Ona + Rufi", "desc": "ona jedzie na Rufim", "scale": 1.15, "sheet": "girlRufi_v23_12frames_sheet.png", "preview": "girlRufi_v23_avatar.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}], MAPS=[{"name": "Kwitnąca dolina", "src": "map_1.webp", "fx": "petals"}, {"name": "Plaża", "src": "map_2.webp", "fx": "bubbles"}, {"name": "Noc nad jeziorem", "src": "map_3.webp", "fx": "fireflies"}, {"name": "Miasteczko", "src": "map_4.webp", "fx": "petals"}, {"name": "Sakura", "src": "map_5.webp", "fx": "petals"}, {"name": "Zachód słońca", "src": "map_6.webp", "fx": "bubbles"}, {"name": "Księżycowa kraina", "src": "map_7.webp", "fx": "fireflies"}], OBSTACLES=[{"src": "obstacle_0.png", "name": "kałuża", "w": 166, "h": 74, "hit": 0.58}, {"src": "obstacle_1.png", "name": "poduszka", "w": 132, "h": 92, "hit": 0.7}, {"src": "obstacle_2.png", "name": "doniczka", "w": 112, "h": 126, "hit": 0.7}, {"src": "obstacle_3.png", "name": "klocki", "w": 130, "h": 116, "hit": 0.7}, {"src": "obstacle_4.png", "name": "miękka kostka", "w": 132, "h": 124, "hit": 0.72}, {"src": "obstacle_5.png", "name": "stołeczek", "w": 124, "h": 112, "hit": 0.7}, {"src": "obstacle_6.png", "name": "rozlana woda", "w": 170, "h": 84, "hit": 0.58}, {"src": "obstacle_7.png", "name": "kocia poducha", "w": 142, "h": 88, "hit": 0.68}, {"src": "obstacle_8.png", "name": "koszyk", "w": 136, "h": 126, "hit": 0.72}], UPPER_OBSTACLES=[{"src": "upper_0.png", "w": 122, "h": 132, "hit": 0.62}, {"src": "upper_1.png", "w": 102, "h": 126, "hit": 0.62}, {"src": "upper_2.png", "w": 116, "h": 122, "hit": 0.62}, {"src": "upper_3.png", "w": 108, "h": 118, "hit": 0.62}, {"src": "upper_4.png", "w": 122, "h": 126, "hit": 0.62}, {"src": "upper_5.png", "w": 106, "h": 116, "hit": 0.62}, {"src": "upper_6.png", "w": 126, "h": 118, "hit": 0.62}, {"src": "upper_7.png", "w": 110, "h": 126, "hit": 0.62}, {"src": "upper_8.png", "w": 118, "h": 132, "hit": 0.62}], COLLECTIBLES=[{"src": "collect_0.png", "name": "Serduszko", "points": 25, "w": 72, "h": 70, "color": "#ff75a9"}, {"src": "collect_1.png", "name": "Prezent", "points": 60, "w": 78, "h": 78, "color": "#ffd06d"}, {"src": "collect_2.png", "name": "Rybka", "points": 45, "w": 82, "h": 66, "color": "#69d4ff"}, {"src": "collect_3.png", "name": "Włóczka", "points": 35, "w": 76, "h": 72, "color": "#bc8cff"}, {"src": "collect_4.png", "name": "Gwiazdka", "points": 50, "w": 74, "h": 74, "color": "#ffe06b"}, {"src": "collect_5.png", "name": "Kryształ", "points": 70, "w": 74, "h": 74, "color": "#ff84ce"}, {"src": "collect_6.png", "name": "Ciasteczko", "points": 30, "w": 72, "h": 68, "color": "#e7b265"}, {"src": "collect_7.png", "name": "Dzwoneczek", "points": 55, "w": 72, "h": 72, "color": "#ffd85e"}, {"src": "collect_8.png", "name": "Kokardka", "points": 40, "w": 76, "h": 70, "color": "#ff86b8"}];
+const STORE='kicia_rufi_runner_v23_7fps_classic_walk_fast_low_jump';
 let app={character:'pink',best:0,animFps:7};
 try{Object.assign(app,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}
 app.animFps=7;
@@ -221,7 +221,7 @@ document.getElementById('random').onclick=()=>{selected=CHARS[Math.floor(Math.ra
 
 const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('stage');
 let W=960,H=540,running=false,paused=false,last=0,elapsed=0,score=0,targetScore=0,speed=325,ground=420;
-let player={x:110,y:0,w:138,h:111,onGround:true,anim:0,landing:0,jumping:false,jumpT:0,jumpDuration:.86,jumpHeight:175,jumpBuffer:0};
+let player={x:110,y:0,w:138,h:111,onGround:true,anim:0,landing:0,jumping:false,jumpT:0,jumpDuration:.70,jumpHeight:158,jumpBuffer:0};
 let obstacles=[],pickups=[],particles=[],texts=[],spawnT=0,nextSpawn=1.4,pickT=0,nextPick=2.7,mapIndex=0,nextMap=1,mapBase=0,mapMix=0,mapChanging=false,fpsFrames=0,fpsTime=0,lastM=0;
 const MAP_STEP=500;
 
@@ -249,14 +249,14 @@ function startGame(){
  requestAnimationFrame(()=>{resize();reset();setHud();draw();mapToast();if(selected.id==='girlRufi')startBirthdayIntro();else startGameplay(isMobile()?3.15:2.35)})
 }
 function reset(){
- elapsed=0;score=0;targetScore=0;speed=isMobile()?168:214;
+ elapsed=0;score=0;targetScore=0;speed=isMobile()?192:226;
  obstacles=[];pickups=[];particles=[];texts=[];
  spawnT=0;nextSpawn=1.8;pickT=0;nextPick=2.7;
  mapIndex=0;nextMap=1;mapBase=0;mapMix=0;mapChanging=false;lastM=0;
  player.onGround=true;player.anim=0;player.landing=0;
  player.jumping=false;player.jumpT=0;player.jumpBuffer=0;
- player.jumpDuration=isMobile()?.92:.88;
- player.jumpHeight=Math.max(isMobile()?232:208,player.h*(isMobile()?1.52:1.40));
+ player.jumpDuration=isMobile()?.72:.70;
+ player.jumpHeight=Math.max(isMobile()?164:156,player.h*(isMobile()?1.10:1.06));
  player.y=ground-player.h;
  document.getElementById('score').textContent='0';
  document.getElementById('hint').style.opacity='1'
@@ -265,7 +265,7 @@ function askJump(){
  if(!running||paused)return;
  document.getElementById('hint').style.opacity='0';
  if(!player.jumping){jump();return}
- if(player.jumpT/player.jumpDuration>.45)player.jumpBuffer=.24
+ if(player.jumpT/player.jumpDuration>.58)player.jumpBuffer=.18
 }
 function releaseJump(){}
 function isMobile(){return matchMedia('(pointer:coarse)').matches||innerWidth<=760}
@@ -304,8 +304,8 @@ function jump(){
  player.onGround=false;
  player.jumpT=0;
  player.jumpBuffer=0;
- player.jumpDuration=isMobile()?.92:.88;
- player.jumpHeight=Math.max(isMobile()?232:208,player.h*(isMobile()?1.52:1.40));
+ player.jumpDuration=isMobile()?.72:.70;
+ player.jumpHeight=Math.max(isMobile()?164:156,player.h*(isMobile()?1.10:1.06));
  for(let i=0;i<4;i++)particles.push({
    x:player.x+player.w*.42,y:ground-3,
    vx:-20-Math.random()*38,vy:-14-Math.random()*30,
@@ -314,7 +314,7 @@ function jump(){
 }
 function spawnGroundObstacle(off=0,sc=1){
  const d=OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)];
- const mobileScale=isMobile()?.76:1.05;
+ const mobileScale=isMobile()?.70:1.00;
  const s=(.96+Math.random()*.08)*sc*mobileScale;
  const w=d.w*s,h=d.h*s;
  // Wkładamy dolną część grafiki w ziemię zamiast stawiać ją "na" ziemi.
@@ -323,7 +323,7 @@ function spawnGroundObstacle(off=0,sc=1){
 }
 function spawnUpperObstacle(off=0,sc=1){
  const d=UPPER_OBSTACLES[Math.floor(Math.random()*UPPER_OBSTACLES.length)];
- const s=(isMobile()?1.02:0.98)*(.94+Math.random()*.08)*sc;
+ const s=(isMobile()?1.00:0.98)*(.94+Math.random()*.08)*sc;
  const w=d.w*s,h=d.h*s;
  const safeGap=(isMobile()?58:44)+player.h*.20;
  const bottom=ground-player.h-safeGap;
@@ -404,8 +404,8 @@ function loop(t){
  const mobile=isMobile();
  // Speed grows smoothly with collected score.
  // 0 pkt: 180/220 px/s, 1000 pkt: +45 px/s, cap: +160 px/s.
- const baseSpeed=mobile?170:220;
- speed=baseSpeed+Math.min(165,score*.040);
+ const baseSpeed=mobile?192:226;
+ speed=baseSpeed+Math.min(160,score*.040);
  player.anim+=dt;
  player.landing=Math.max(0,player.landing-dt);
  fpsFrames++;fpsTime+=dt;if(fpsTime>.5){document.getElementById('fps').textContent='FPS: '+Math.round(fpsFrames/fpsTime);fpsFrames=0;fpsTime=0}
@@ -431,8 +431,8 @@ function loop(t){
  }
  spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){
   spawnT=0;spawnPattern();
-  const minGapPx=mobile?650:620;
-  nextSpawn=minGapPx/speed+.52+Math.random()*.62
+  const minGapPx=mobile?620:590;
+  nextSpawn=minGapPx/speed+.48+Math.random()*.58
  }if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
  obstacles.forEach(e=>e.x-=speed*dt);obstacles=obstacles.filter(e=>e.x+e.w>-180);for(const e of obstacles){if(hit(player,e,e.d.hit)){gameOver();draw();return}}
  for(const p of pickups){if(p.state==='world'){p.x-=speed*dt;if(hit(player,p,.56))collect(p)}else if(p.state==='fly'){p.t=Math.min(1,p.t+dt/.43);const q=1-Math.pow(1-p.t,3),arc=-76*Math.sin(Math.PI*p.t);p.x=p.sx+(p.tx-p.sx)*q;p.y=p.sy+(p.ty-p.sy)*q+arc;p.scale=1-.53*q;if(p.t>=1)arrive(p)}}
@@ -475,7 +475,7 @@ function playerFrame(){
  }
  if(player.landing>0)return selected.land;
  const seq=selected.runSeq;
- const runFps=selected.id==='girlRufi'?22:Math.max(8,Math.min(11,8+(speed-184)/72));
+ const runFps=7;
  return seq[Math.floor(player.anim*runFps)%seq.length]
 }
 function drawPlayer(){
