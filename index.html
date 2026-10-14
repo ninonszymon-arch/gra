@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#140a19">
-<title>Kicia & Rufi Runner V28</title>
+<title>Kicia & Rufi Runner V30</title>
 <style>
 :root{
  --bg:#0b0710;--panel:#1b1121;--line:rgba(255,255,255,.11);
@@ -154,7 +154,7 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
   <canvas id="canvas"></canvas>
   <div id="hint" class="hint">Dotknij / kliknij = skok</div>
   <div id="mapName" class="mapName"></div>
-  <div id="tempoBadge" class="tempoBadge">Tempo 1.0× • 96 BPM</div><div id="fps" class="fps">FPS: --</div>
+  <div id="tempoBadge" class="tempoBadge">Din-din 1.0× • 96 BPM</div><div id="fps" class="fps">FPS: --</div>
   <div id="birthdayIntro" class="birthdayIntro hidden">
     <button id="birthdaySkip" class="birthdaySkip">Pomiń ›</button>
   </div>
@@ -169,7 +169,7 @@ body.game-active *{-webkit-user-select:none!important;user-select:none!important
 
 <script>
 const CHARS=[{"id": "pink", "name": "Różowa Kicia", "desc": "różowa kicia", "scale": 1.0, "sheet": "pink_v26_sheet.png", "preview": "pink_v26_avatar.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}, {"id": "peach", "name": "Brzoskwiniowa Kicia", "desc": "brzoskwiniowa kicia", "scale": 1.0, "sheet": "peach_v26_sheet.png", "preview": "peach_v26_avatar.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}, {"id": "black", "name": "Czarna Kicia", "desc": "czarno-biała kicia", "scale": 1.0, "sheet": "black_v26_sheet.png", "preview": "black_v26_avatar.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}, {"id": "lavender", "name": "Lawendowa Kicia", "desc": "lawendowa kicia", "scale": 1.0, "sheet": "lavender_v26_sheet.png", "preview": "lavender_v26_avatar.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}, {"id": "rufi", "name": "Rufi", "desc": "Rufi", "scale": 1.08, "sheet": "rufi_v26_sheet.png", "preview": "rufi_v26_avatar.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}, {"id": "girlRufi", "name": "Ona + Rufi", "desc": "ona jedzie na Rufim", "scale": 1.15, "sheet": "girlRufi_v26_sheet.png", "preview": "girlRufi_v26_avatar.png", "frameCols": 4, "frameRows": 3, "frameCount": 12, "runSeq": [0, 1, 2, 3, 4, 5, 6, 7], "land": 11, "jumpStart": 8, "jumpAir": 9, "jumpPeak": 10, "jumpSeq": [8, 9, 10, 11]}], MAPS=[{"name": "Kwitnąca dolina", "src": "map_1.webp", "fx": "petals"}, {"name": "Plaża", "src": "map_2.webp", "fx": "bubbles"}, {"name": "Noc nad jeziorem", "src": "map_3.webp", "fx": "fireflies"}, {"name": "Miasteczko", "src": "map_4.webp", "fx": "petals"}, {"name": "Sakura", "src": "map_5.webp", "fx": "petals"}, {"name": "Zachód słońca", "src": "map_6.webp", "fx": "bubbles"}, {"name": "Księżycowa kraina", "src": "map_7.webp", "fx": "fireflies"}], OBSTACLES=[{"src": "obstacle_0.png", "name": "kałuża", "w": 228, "h": 102, "hit": 0.54}, {"src": "obstacle_1.png", "name": "poduszka", "w": 176, "h": 122, "hit": 0.66}, {"src": "obstacle_2.png", "name": "doniczka", "w": 148, "h": 166, "hit": 0.66}, {"src": "obstacle_3.png", "name": "klocki", "w": 176, "h": 154, "hit": 0.66}, {"src": "obstacle_4.png", "name": "miękka kostka", "w": 178, "h": 168, "hit": 0.68}, {"src": "obstacle_5.png", "name": "stołeczek", "w": 166, "h": 150, "hit": 0.66}, {"src": "obstacle_6.png", "name": "rozlana woda", "w": 236, "h": 114, "hit": 0.54}, {"src": "obstacle_7.png", "name": "kocia poducha", "w": 188, "h": 116, "hit": 0.64}, {"src": "obstacle_8.png", "name": "koszyk", "w": 182, "h": 168, "hit": 0.68}], UPPER_OBSTACLES=[{"src": "upper_0.png", "w": 154, "h": 166, "hit": 0.60}, {"src": "upper_1.png", "w": 130, "h": 160, "hit": 0.60}, {"src": "upper_2.png", "w": 146, "h": 154, "hit": 0.60}, {"src": "upper_3.png", "w": 138, "h": 148, "hit": 0.60}, {"src": "upper_4.png", "w": 154, "h": 160, "hit": 0.60}, {"src": "upper_5.png", "w": 136, "h": 146, "hit": 0.60}, {"src": "upper_6.png", "w": 160, "h": 148, "hit": 0.60}, {"src": "upper_7.png", "w": 140, "h": 160, "hit": 0.60}, {"src": "upper_8.png", "w": 150, "h": 166, "hit": 0.60}], COLLECTIBLES=[{"src": "collect_0.png", "name": "Serduszko", "points": 25, "w": 72, "h": 70, "color": "#ff75a9"}, {"src": "collect_1.png", "name": "Prezent", "points": 60, "w": 78, "h": 78, "color": "#ffd06d"}, {"src": "collect_2.png", "name": "Rybka", "points": 45, "w": 82, "h": 66, "color": "#69d4ff"}, {"src": "collect_3.png", "name": "Włóczka", "points": 35, "w": 76, "h": 72, "color": "#bc8cff"}, {"src": "collect_4.png", "name": "Gwiazdka", "points": 50, "w": 74, "h": 74, "color": "#ffe06b"}, {"src": "collect_5.png", "name": "Kryształ", "points": 70, "w": 74, "h": 74, "color": "#ff84ce"}, {"src": "collect_6.png", "name": "Ciasteczko", "points": 30, "w": 72, "h": 68, "color": "#e7b265"}, {"src": "collect_7.png", "name": "Dzwoneczek", "points": 55, "w": 72, "h": 72, "color": "#ffd85e"}, {"src": "collect_8.png", "name": "Kokardka", "points": 40, "w": 76, "h": 70, "color": "#ff86b8"}];
-const STORE='kicia_rufi_runner_v28_turbo_music';
+const STORE='kicia_rufi_runner_v30_smooth_music_fair_turbo_jump';
 let app={character:'pink',best:0,animFps:7,music:true};
 try{Object.assign(app,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){}
 app.animFps=7;
@@ -257,7 +257,7 @@ function reset(){
  mapIndex=0;nextMap=1;mapBase=0;mapMix=0;mapChanging=false;lastM=0;
  player.onGround=true;player.anim=0;player.landing=0;
  player.jumping=false;player.jumpT=0;player.jumpBuffer=0;
- player.jumpDuration=isMobile()?.82:.78;
+ player.jumpDuration=isMobile()?.80:.76;
  player.jumpHeight=Math.max(isMobile()?158:150,player.h*(isMobile()?1.08:1.04));
  player.y=ground-player.h;
  document.getElementById('score').textContent='0';
@@ -306,8 +306,11 @@ function jump(){
  player.onGround=false;
  player.jumpT=0;
  player.jumpBuffer=0;
- player.jumpDuration=isMobile()?.82:.78;
- player.jumpHeight=Math.max(isMobile()?158:150,player.h*(isMobile()?1.08:1.04));
+ // V30: im szybciej jedzie gra, tym krótszy lot i szybszy powrót na ziemię.
+ const mobile=isMobile(),base=mobile?205:240,cap=mobile?300:340;
+ const turbo=Math.max(0,Math.min(1,(speed-base)/cap));
+ player.jumpDuration=(mobile?.80:.76)-turbo*(mobile?.32:.30);
+ player.jumpHeight=Math.max(mobile?158:150,player.h*(mobile?1.08:1.04));
  for(let i=0;i<4;i++)particles.push({
    x:player.x+player.w*.42,y:ground-3,
    vx:-20-Math.random()*38,vy:-14-Math.random()*30,
@@ -333,7 +336,13 @@ function spawnUpperObstacle(off=0,sc=1){
 }
 function spawnPattern(){
  const r=Math.random();
- const pairGap=Math.max(isMobile()?190:220,(isMobile()?275:305)-Math.min(85,score*.035));
+ const mobile=isMobile(),base=mobile?205:240,cap=mobile?300:340;
+ const turbo=Math.max(0,Math.min(1,(speed-base)/cap));
+ const currentJumpDuration=(mobile?.80:.76)-turbo*(mobile?.32:.30);
+ // Pikselowo zostawiamy tyle miejsca, żeby dało się wylądować.
+ // Czasowo i tak jest coraz ciaśniej, bo prędkość mocno rośnie.
+ const recoveryDistance=speed*currentJumpDuration;
+ const pairGap=Math.max(mobile?245:270,recoveryDistance+(mobile?42:48));
  if(score<60){spawnGroundObstacle();return}
  if(score<220){
   if(r<.38)spawnUpperObstacle(); else spawnGroundObstacle();
@@ -380,42 +389,39 @@ function gameOver(){running=false;stopMusic();app.best=Math.max(app.best,score);
 function startMapChange(){if(mapChanging)return;nextMap=(mapIndex+1)%MAPS.length;mapChanging=true;mapMix=0;milestone('✦ Nagroda: '+MAPS[nextMap].name+' ✦')}
 function mapProgress(){return Math.max(0,Math.min(1,(score-mapBase)/MAP_STEP))}
 
-// ===== V28: dynamiczna muzyka =====
+// ===== V30: jedna muzyczka "din din" — tylko przyspiesza =====
 let audioCtx=null,masterGain=null,musicTimer=null,nextNoteTime=0,musicStep=0;
-function currentBpm(){return Math.round(Math.min(190,96+score*.040))}
-function tone(freq,time,dur,type='triangle',vol=.035){
+function currentBpm(){return Math.round(Math.min(184,96+score*.038))}
+function tone(freq,time,dur,type='triangle',vol=.026){
  if(!audioCtx||!masterGain||!app.music)return;
  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
  o.type=type;o.frequency.setValueAtTime(freq,time);
- g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(vol,time+.008);g.gain.exponentialRampToValueAtTime(.0001,time+dur);
- o.connect(g);g.connect(masterGain);o.start(time);o.stop(time+dur+.02)
-}
-function noiseHit(time,vol=.025){
- if(!audioCtx||!masterGain||!app.music)return;
- const len=Math.max(1,Math.floor(audioCtx.sampleRate*.035)),buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate),data=buf.getChannelData(0);
- for(let i=0;i<len;i++)data[i]=(Math.random()*2-1)*(1-i/len);
- const s=audioCtx.createBufferSource(),g=audioCtx.createGain();s.buffer=buf;g.gain.value=vol;s.connect(g);g.connect(masterGain);s.start(time)
+ g.gain.setValueAtTime(.0001,time);
+ g.gain.exponentialRampToValueAtTime(vol,time+.006);
+ g.gain.exponentialRampToValueAtTime(.0001,time+dur);
+ o.connect(g);g.connect(masterGain);o.start(time);o.stop(time+dur+.015)
 }
 function scheduleBeat(){
  if(!audioCtx||!app.music||!running||paused)return;
  const bpm=currentBpm(),stepDur=60/bpm/2;
- while(nextNoteTime<audioCtx.currentTime+.18){
+ const notes=[261.63,329.63,392.00,329.63,293.66,349.23,440.00,349.23];
+ while(nextNoteTime<audioCtx.currentTime+.20){
   const step=musicStep%8;
-  const notes=[261.63,329.63,392.00,329.63,293.66,349.23,440.00,349.23];
-  if(step%2===0)tone(notes[step],nextNoteTime,Math.min(.12,stepDur*.72),'triangle',.024);
-  if(step===0||step===4)tone(82.41,nextNoteTime,.08,'sine',.045);
-  if(score>350)noiseHit(nextNoteTime+(stepDur*.48),.010+Math.min(.018,score/90000));
-  if(score>1000&&step%2===1)tone(notes[(step+2)%8]*2,nextNoteTime,.055,'square',.008);
+  tone(notes[step],nextNoteTime,Math.min(.11,stepDur*.60),'triangle',.022);
+  if(step===0||step===4)tone(130.81,nextNoteTime,Math.min(.10,stepDur*.55),'sine',.012);
   nextNoteTime+=stepDur;musicStep++
  }
 }
 function startMusic(){
  if(!app.music)return;
  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
- if(!audioCtx){audioCtx=new AC();masterGain=audioCtx.createGain();masterGain.gain.value=.72;masterGain.connect(audioCtx.destination)}
+ if(!audioCtx){
+  audioCtx=new AC();masterGain=audioCtx.createGain();
+  masterGain.gain.value=.42;masterGain.connect(audioCtx.destination)
+ }
  try{audioCtx.resume()}catch(e){}
- nextNoteTime=audioCtx.currentTime+.04;
- if(!musicTimer)musicTimer=setInterval(scheduleBeat,45)
+ nextNoteTime=Math.max(audioCtx.currentTime+.04,nextNoteTime||0);
+ if(!musicTimer)musicTimer=setInterval(scheduleBeat,40)
 }
 function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}}
 function setMusicUi(){const b=document.getElementById('musicToggle');if(b){b.textContent=app.music?'♫':'×';b.title=app.music?'Muzyka: włączona':'Muzyka: wyłączona'}}
@@ -468,10 +474,10 @@ function loop(t){
  if(player.jumping){
   player.jumpT+=dt;
   const p=Math.min(1,player.jumpT/player.jumpDuration);
-  const apex=.34;
+  const apex=.31;
   let arc;
-  if(p<apex){const q=p/apex;arc=1-Math.pow(1-q,2)}
-  else{const q=(p-apex)/(1-apex);arc=1-q*q}
+  if(p<apex){const q=p/apex;arc=1-Math.pow(1-q,2.15)}
+  else{const q=(p-apex)/(1-apex);arc=Math.pow(1-q,1.38)}
   player.y=ground-player.h-player.jumpHeight*arc;
   player.onGround=false;
   if(p>=1){
@@ -490,13 +496,15 @@ function loop(t){
  }
  spawnT+=dt;pickT+=dt;if(spawnT>=nextSpawn){
   spawnT=0;spawnPattern();
-  const minGapPx=Math.max(mobile?295:320,(mobile?500:530)-Math.min(205,score*.085));
-  nextSpawn=minGapPx/speed+.14+Math.random()*.24
+  const turbo=Math.max(0,Math.min(1,(speed-(mobile?205:240))/(mobile?300:340)));
+  const minGapPx=Math.max(mobile?305:330,(mobile?500:530)-Math.min(195,score*.080));
+  const minTime=(mobile?.52:.50)-turbo*.08;
+  nextSpawn=Math.max(minTime,minGapPx/speed)+.10+Math.random()*.20
  }if(pickT>=nextPick){pickT=0;spawnPickup();nextPick=2.45+Math.random()*2.1}
  obstacles.forEach(e=>{e.x-=speed*dt;if(!e.passed&&e.x+e.w<player.x){e.passed=true;targetScore+=e.kind==='upper'?8:6}});obstacles=obstacles.filter(e=>e.x+e.w>-180);for(const e of obstacles){if(hit(player,e,e.d.hit)){gameOver();draw();return}}
  for(const p of pickups){if(p.state==='world'){p.x-=speed*dt;if(hit(player,p,.56))collect(p)}else if(p.state==='fly'){p.t=Math.min(1,p.t+dt/.43);const q=1-Math.pow(1-p.t,3),arc=-76*Math.sin(Math.PI*p.t);p.x=p.sx+(p.tx-p.sx)*q;p.y=p.sy+(p.ty-p.sy)*q+arc;p.scale=1-.53*q;if(p.t>=1)arrive(p)}}
  pickups=pickups.filter(p=>p.state!=='done'&&p.x+p.w>-130);
- score+=(targetScore-score)*Math.min(1,dt*10.5);if(Math.abs(targetScore-score)<.02)score=targetScore;document.getElementById('score').textContent=Math.floor(score);const bpm=currentBpm(),tempoScale=(speed/(mobile?205:240)).toFixed(1);const tb=document.getElementById('tempoBadge');if(tb)tb.textContent='Tempo '+tempoScale+'× • '+bpm+' BPM';
+ score+=(targetScore-score)*Math.min(1,dt*10.5);if(Math.abs(targetScore-score)<.02)score=targetScore;document.getElementById('score').textContent=Math.floor(score);const bpm=currentBpm(),tempoScale=(speed/(mobile?205:240)).toFixed(1);const tb=document.getElementById('tempoBadge');if(tb)tb.textContent='Din-din '+tempoScale+'× • '+bpm+' BPM';
  if(score>app.best){app.best=score;document.getElementById('best').textContent=Math.floor(app.best)}
  if(score>=55&&score<260)upperNotice.classList.add('show');else upperNotice.classList.remove('show');
  const m=Math.floor(score/500)*500;if(m>=500&&m>lastM){lastM=m;startMapChange()}
